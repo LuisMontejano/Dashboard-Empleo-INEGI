@@ -1,0 +1,334 @@
+[
+  {
+    "id": "1007000012",
+    "name": "Conflictos de trabajo"
+  },
+  {
+    "id": "1007000013",
+    "name": "Conflictos de trabajo solucionados"
+  },
+  {
+    "id": "1007000014",
+    "name": "Huelgas estalladas"
+  },
+  {
+    "id": "1007000015",
+    "name": "Huelgas solucionadas"
+  },
+  {
+    "id": "5000000002",
+    "name": "Personal ocupado total. Universo total"
+  },
+  {
+    "id": "5300000011",
+    "name": "Personal ocupado total. Sector privado y paraestatal"
+  },
+  {
+    "id": "5300000012",
+    "name": "Personal ocupado total. Gran sector 43-46. Comercio"
+  },
+  {
+    "id": "5300000013",
+    "name": "Personal ocupado total. Gran sector 51 ,53 ,54 ,55, 56, 61, 62, 71, 72 y 81. Servicios privados no financieros"
+  },
+  {
+    "id": "5300000014",
+    "name": "Personal ocupado total. Sector 11. Pesca y acuicultura"
+  },
+  {
+    "id": "5300000015",
+    "name": "Personal ocupado total. Sector 21. Minería"
+  },
+  {
+    "id": "5300000016",
+    "name": "Personal ocupado total. Sector 22. Electricidad, agua y gas"
+  },
+  {
+    "id": "5300000017",
+    "name": "Personal ocupado total. Sector 23. Construcción"
+  },
+  {
+    "id": "5300000018",
+    "name": "Personal ocupado total. Sector 31-33. Industrias manufactureras"
+  },
+  {
+    "id": "5300000019",
+    "name": "Personal ocupado total. Sector 48-49. Transportes"
+  },
+  {
+    "id": "5300000020",
+    "name": "Personal ocupado total. Sector 52. Servicios financieros y de seguros"
+  },
+  {
+    "id": "6200032077",
+    "name": "Población no económicamente activa - 15 años y más"
+  },
+  {
+    "id": "6200032078",
+    "name": "Población no económicamente activa disponible - 15 años y más"
+  },
+  {
+    "id": "6200032079",
+    "name": "Población no económicamente activa no disponible - 15 años y más"
+  },
+  {
+    "id": "6200032080",
+    "name": "Población ocupada con ingresos de hasta un salario mínimo - 15 años y más"
+  },
+  {
+    "id": "6200032081",
+    "name": "Población ocupada con ingresos de hasta un salario mínimo - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032082",
+    "name": "Población ocupada con ingresos de hasta un salario mínimo - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032083",
+    "name": "Población ocupada con ingresos de más de 1 hasta 2 salarios mínimos - 15 años y más"
+  },
+  {
+    "id": "6200032084",
+    "name": "Población ocupada con ingresos de más de 1 hasta 2 salarios mínimos - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032085",
+    "name": "Población ocupada con ingresos de más de 1 hasta 2 salarios mínimos - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032086",
+    "name": "Población ocupada con ingresos de más de 2 hasta 3 salarios mínimos - 15 años y más"
+  },
+  {
+    "id": "6200032087",
+    "name": "Población ocupada con ingresos de más de 2 hasta 3 salarios mínimos - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032088",
+    "name": "Población ocupada con ingresos de más de 2 hasta 3 salarios mínimos - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032089",
+    "name": "Población ocupada con ingresos de más de 3 hasta 5 salarios mínimos - 15 años y más"
+  },
+  {
+    "id": "6200032090",
+    "name": "Población ocupada con ingresos de más de 3 hasta 5 salarios mínimos - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032091",
+    "name": "Población ocupada con ingresos de más de 3 hasta 5 salarios mínimos - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032092",
+    "name": "Población ocupada con ingresos de más de 5 salarios mínimos - 15 años y más"
+  },
+  {
+    "id": "6200032093",
+    "name": "Población ocupada con ingresos de más de 5 salarios mínimos - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032094",
+    "name": "Población ocupada con ingresos de más de 5 salarios mínimos - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032095",
+    "name": "Población ocupada que no recibe ingresos - 15 años y más"
+  },
+  {
+    "id": "6200032096",
+    "name": "Población ocupada que no recibe ingresos - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032097",
+    "name": "Población ocupada que no recibe ingresos - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200032098",
+    "name": "Población ocupada con ingresos no especificados - 15 años y más"
+  },
+  {
+    "id": "6200032099",
+    "name": "Población ocupada con ingresos no especificados - 15 años y más, hombres"
+  },
+  {
+    "id": "6200032100",
+    "name": "Población ocupada con ingresos no especificados - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200089275",
+    "name": "Cantidad de personal ocupado total en la prestación del servicio de agua potable"
+  },
+  {
+    "id": "6200089276",
+    "name": "Cantidad de personal sindicalizado ocupado en la prestación del servicio de agua potable"
+  },
+  {
+    "id": "6200089277",
+    "name": "Cantidad de personal de confianza ocupado en la prestación del servicio de agua potable"
+  },
+  {
+    "id": "6200093709",
+    "name": "Población ocupada en el sector informal - 15 años y más"
+  },
+  {
+    "id": "6200093715",
+    "name": "Población ocupada en el sector informal - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200093716",
+    "name": "Población ocupada en el sector informal - 15 años y más, hombres"
+  },
+  {
+    "id": "6200093950",
+    "name": "Población ocupada - 15 años y más, hombres"
+  },
+  {
+    "id": "6200093954",
+    "name": "Población ocupada - 15 años y más"
+  },
+  {
+    "id": "6200093956",
+    "name": "Población ocupada - 15 años y más, mujeres"
+  },
+  {
+    "id": "6200093960",
+    "name": "Población económicamente activa - 15 años y más"
+  },
+  {
+    "id": "6200093963",
+    "name": "Población en edad de trabajar  (15 años y más)"
+  },
+  {
+    "id": "6200093973",
+    "name": "Población desocupada - 15 años y más"
+  },
+  {
+    "id": "6200093974",
+    "name": "Población desocupada - 15 años y más, hombres"
+  },
+  {
+    "id": "6200093975",
+    "name": "Población desocupada - 15 años y más, mujeres"
+  },
+  {
+    "id": "6207019030",
+    "name": "Porcentaje de población de 12 años y más económicamente activa"
+  },
+  {
+    "id": "6207019035",
+    "name": "Porcentaje de la población de 12 años y más No Económicamente Activa"
+  },
+  {
+    "id": "6207019039",
+    "name": "Porcentaje de la población de 12 años y más económicamente activa ocupada"
+  },
+  {
+    "id": "6207019040",
+    "name": "Porcentaje de la población femenina de 12 años y más económicamente activa"
+  },
+  {
+    "id": "6207019043",
+    "name": "Porcentaje de la población masculina de 12 años y más económicamente activa"
+  },
+  {
+    "id": "6207019047",
+    "name": "Porcentaje de la población de 12 años y más no económicamente activa que estudia"
+  },
+  {
+    "id": "6207019054",
+    "name": "Porcentaje de la población femenina de 12 años y más económicamente activa ocupada"
+  },
+  {
+    "id": "6207019056",
+    "name": "Porcentaje de la población masculina de 12 años y más económicamente activa ocupada"
+  },
+  {
+    "id": "6207019059",
+    "name": "Porcentaje de población de 12 años con condición de actividad económica no especificada"
+  },
+  {
+    "id": "6207019060",
+    "name": "Porcentaje de la población de 12 años y más no económicamente activa que es pensionada o jubilada"
+  },
+  {
+    "id": "6207019064",
+    "name": "Porcentaje de la población de 12 años y más no económicamente activa que se dedica a los quehaceres del hogar"
+  },
+  {
+    "id": "6207019065",
+    "name": "Porcentaje de la población de 12 años y más no económicamente activa que realiza otras actividades no económicas"
+  },
+  {
+    "id": "6207019070",
+    "name": "Porcentaje de la población de 12 años y más no económicamente activa con alguna limitación física o mental que les impide trabajar"
+  },
+  {
+    "id": "6207128136",
+    "name": "Personal ocupado total. Sector 46. Comercio al por menor"
+  },
+  {
+    "id": "6207128151",
+    "name": "Personal ocupado total. Sector 43. Comercio al por mayor"
+  },
+  {
+    "id": "6207128161",
+    "name": "Personal ocupado total. Resto de las actividades. Sectores 11, 22, 23, 48-49, 52"
+  },
+  {
+    "id": "6207129061",
+    "name": "Estructura porcentual de personal ocupado. Hombres. Universo total"
+  },
+  {
+    "id": "6207129062",
+    "name": "Estructura porcentual de personal ocupado. Mujeres . Universo total"
+  },
+  {
+    "id": "6207129134",
+    "name": "Personal ocupado que inició operaciones en el año censal. Universo total"
+  },
+  {
+    "id": "6207129137",
+    "name": "Personal ocupado que inició operaciones antes del año censal. Zona Rural. Universo total"
+  },
+  {
+    "id": "6207129138",
+    "name": "Personal ocupado en Zona Urbana. Servicios públicos. Universo total"
+  },
+  {
+    "id": "6207129139",
+    "name": "Personal ocupado que inició operaciones antes del año censal. Zona Urbana. Universo total"
+  },
+  {
+    "id": "6207129140",
+    "name": "Personal ocupado en Zona Urbana. Asociaciones religiosas. Universo total"
+  },
+  {
+    "id": "6207129141",
+    "name": "Personal ocupado de servicios públicos y asociaciones religiosas. Universo total"
+  },
+  {
+    "id": "6207129142",
+    "name": "Personal ocupado en Zona Urbana. Sector privado y paraestatal. Universo total"
+  },
+  {
+    "id": "6207129145",
+    "name": "Personal ocupado que inició operaciones antes del año censal. Universo total"
+  },
+  {
+    "id": "6207129551",
+    "name": "Tasa de crecimiento de Personal ocupado total. Sector privado y paraestatal"
+  },
+  {
+    "id": "6300000253",
+    "name": "Proporción de escaños ocupados por mujeres en la Cámara de Diputados"
+  },
+  {
+    "id": "6300000256",
+    "name": "Proporción de escaños ocupados por mujeres en la Cámara de Senadores"
+  },
+  {
+    "id": "6300000259",
+    "name": "Proporción de mujeres en el total de asalariados en el sector no agropecuario - 14 años y más; serie 1995 - 2013"
+  }
+]
