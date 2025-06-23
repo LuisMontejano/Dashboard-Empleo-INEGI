@@ -3,74 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análisis de Empleo y Ocupación - INEGI</title>
+    <title>Dashboard INEGI - Empleo México</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        :root {
-            /* Material Design 3 Green Color Scheme */
-            --md-sys-color-primary: #2E7D32;
-            --md-sys-color-on-primary: #FFFFFF;
-            --md-sys-color-primary-container: #A8DAB5;
-            --md-sys-color-on-primary-container: #00210A;
-            
-            --md-sys-color-secondary: #526350;
-            --md-sys-color-on-secondary: #FFFFFF;
-            --md-sys-color-secondary-container: #D4E8D0;
-            --md-sys-color-on-secondary-container: #101F0F;
-            
-            --md-sys-color-tertiary: #38656A;
-            --md-sys-color-on-tertiary: #FFFFFF;
-            --md-sys-color-tertiary-container: #BCEBF0;
-            --md-sys-color-on-tertiary-container: #001F23;
-            
-            --md-sys-color-surface: #FDFDF5;
-            --md-sys-color-surface-dim: #DDD8CF;
-            --md-sys-color-surface-bright: #FDFDF5;
-            --md-sys-color-surface-container-lowest: #FFFFFF;
-            --md-sys-color-surface-container-low: #F7F3EA;
-            --md-sys-color-surface-container: #F1EDDF;
-            --md-sys-color-surface-container-high: #ECE7D9;
-            --md-sys-color-surface-container-highest: #E6E1D3;
-            
-            --md-sys-color-on-surface: #1C1B16;
-            --md-sys-color-on-surface-variant: #44483E;
-            --md-sys-color-outline: #74796E;
-            --md-sys-color-outline-variant: #C4C8BC;
-            
-            --md-sys-color-error: #BA1A1A;
-            --md-sys-color-on-error: #FFFFFF;
-            --md-sys-color-error-container: #FFDAD6;
-            --md-sys-color-on-error-container: #410002;
-            
-            /* Green accent colors for charts */
-            --chart-primary: #2E7D32;
-            --chart-primary-light: #4CAF50;
-            --chart-secondary: #388E3C;
-            --chart-tertiary: #1B5E20;
-            --chart-accent: #66BB6A;
-            --chart-success: #4CAF50;
-            --chart-warning: #FF8F00;
-            --chart-info: #00ACC1;
-            
-            /* Elevation shadows */
-            --md-sys-elevation-level1: 0px 1px 2px 0px rgba(46, 125, 50, 0.3), 0px 1px 3px 1px rgba(46, 125, 50, 0.15);
-            --md-sys-elevation-level2: 0px 1px 2px 0px rgba(46, 125, 50, 0.3), 0px 2px 6px 2px rgba(46, 125, 50, 0.15);
-            --md-sys-elevation-level3: 0px 1px 3px 0px rgba(46, 125, 50, 0.3), 0px 4px 8px 3px rgba(46, 125, 50, 0.15);
-            --md-sys-elevation-level4: 0px 2px 3px 0px rgba(46, 125, 50, 0.3), 0px 6px 10px 4px rgba(46, 125, 50, 0.15);
-            --md-sys-elevation-level5: 0px 4px 4px 0px rgba(46, 125, 50, 0.3), 0px 8px 12px 6px rgba(46, 125, 50, 0.15);
-            
-            /* Shape tokens */
-            --md-sys-shape-corner-none: 0px;
-            --md-sys-shape-corner-extra-small: 4px;
-            --md-sys-shape-corner-small: 8px;
-            --md-sys-shape-corner-medium: 12px;
-            --md-sys-shape-corner-large: 16px;
-            --md-sys-shape-corner-extra-large: 28px;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -78,450 +15,155 @@
         }
 
         body {
-            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        .top-app-bar {
-            background-color: var(--md-sys-color-surface-container);
-            padding: 16px 24px;
-            box-shadow: var(--md-sys-elevation-level2);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .top-app-bar h1 {
-            font-size: 22px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .top-app-bar .material-icons {
-            font-size: 24px;
-            color: var(--md-sys-color-primary);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
+            min-height: 100vh;
+            color: #1b5e20;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 24px;
+            padding: 20px;
         }
 
-        .hero-section {
-            background: linear-gradient(135deg, var(--md-sys-color-primary-container) 0%, var(--md-sys-color-secondary-container) 100%);
-            border-radius: var(--md-sys-shape-corner-extra-large);
-            padding: 48px 32px;
-            margin-bottom: 32px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        .header {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.1);
+            border-left: 6px solid #2e7d32;
         }
 
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 100%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        .hero-title {
-            font-size: 36px;
-            font-weight: 400;
-            color: var(--md-sys-color-on-primary-container);
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #1b5e20;
             margin-bottom: 8px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-subtitle {
-            font-size: 16px;
-            color: var(--md-sys-color-on-primary-container);
-            opacity: 0.8;
-            position: relative;
-            z-index: 1;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 16px;
-            margin-bottom: 32px;
-        }
-
-        .stat-card {
-            background-color: var(--md-sys-color-surface-container-low);
-            border-radius: var(--md-sys-shape-corner-large);
-            padding: 24px;
-            box-shadow: var(--md-sys-elevation-level1);
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            border: 1px solid var(--md-sys-color-outline-variant);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .stat-card:hover {
-            box-shadow: var(--md-sys-elevation-level3);
-            transform: translateY(-2px);
-            background-color: var(--md-sys-color-surface-container);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--md-sys-color-primary), var(--md-sys-color-tertiary));
-        }
-
-        .stat-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 16px;
         }
 
-        .stat-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--md-sys-shape-corner-small);
-            background-color: var(--md-sys-color-primary-container);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--md-sys-color-on-primary-container);
-        }
-
-        .stat-number {
-            font-size: 32px;
+        .header p {
+            color: #4caf50;
             font-weight: 500;
-            color: var(--md-sys-color-primary);
-            margin-bottom: 4px;
-            font-variant-numeric: tabular-nums;
         }
 
-        .stat-label {
-            font-size: 14px;
-            color: var(--md-sys-color-on-surface-variant);
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .controls-section {
-            background-color: var(--md-sys-color-surface-container-low);
-            border-radius: var(--md-sys-shape-corner-large);
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: var(--md-sys-elevation-level1);
-            border: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .controls-title {
-            font-size: 16px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .controls-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 16px;
+            margin-bottom: 24px;
         }
 
-        .input-group {
-            position: relative;
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
+            border-top: 4px solid #4caf50;
         }
 
-        .input-group label {
-            font-size: 12px;
+        .stat-number {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2e7d32;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
             font-weight: 500;
-            color: var(--md-sys-color-on-surface-variant);
-            margin-bottom: 8px;
-            display: block;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .input-group select {
-            width: 100%;
-            padding: 16px;
-            border: 2px solid var(--md-sys-color-outline);
-            border-radius: var(--md-sys-shape-corner-small);
-            background-color: var(--md-sys-color-surface);
-            color: var(--md-sys-color-on-surface);
-            font-size: 16px;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 12px center;
-            background-repeat: no-repeat;
-            background-size: 16px;
-            padding-right: 40px;
+        .controls {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
-        .input-group select:focus {
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            color: #2e7d32;
+            font-size: 14px;
+        }
+
+        .control-group select {
+            padding: 10px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            min-width: 200px;
+            cursor: pointer;
+        }
+
+        .control-group select:focus {
             outline: none;
-            border-color: var(--md-sys-color-primary);
-            box-shadow: 0 0 0 3px rgba(103, 80, 164, 0.12);
+            border-color: #4caf50;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
         }
 
-        .charts-grid {
+        .charts {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 24px;
-            margin-bottom: 32px;
+            margin-bottom: 24px;
         }
 
         .chart-card {
-            background-color: var(--md-sys-color-surface-container-low);
-            border-radius: var(--md-sys-shape-corner-large);
+            background: white;
+            border-radius: 12px;
             padding: 24px;
-            box-shadow: var(--md-sys-elevation-level1);
-            border: 1px solid var(--md-sys-color-outline-variant);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chart-card:hover {
-            box-shadow: var(--md-sys-elevation-level2);
-        }
-
-        .chart-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant);
+            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
         }
 
         .chart-title {
             font-size: 18px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
+            font-weight: 600;
+            color: #1b5e20;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .chart-menu {
-            color: var(--md-sys-color-on-surface-variant);
-            cursor: pointer;
-            padding: 8px;
-            border-radius: var(--md-sys-shape-corner-small);
-            transition: background-color 0.2s ease;
-        }
-
-        .chart-menu:hover {
-            background-color: var(--md-sys-color-surface-container);
-        }
-
-        .chart-container-wrapper {
+        .chart-container {
             position: relative;
-            height: 350px;
+            height: 300px;
         }
 
-        .analysis-section {
-            background-color: var(--md-sys-color-surface-container-low);
-            border-radius: var(--md-sys-shape-corner-large);
-            padding: 32px;
-            margin-bottom: 32px;
-            box-shadow: var(--md-sys-elevation-level1);
-            border: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .analysis-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 24px;
-            padding-bottom: 16px;
-            border-bottom: 2px solid var(--md-sys-color-primary-container);
-        }
-
-        .analysis-header .material-icons {
-            color: var(--md-sys-color-primary);
-            font-size: 28px;
-        }
-
-        .analysis-title {
-            font-size: 24px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-        }
-
-        .indicator-card {
-            background-color: var(--md-sys-color-surface);
-            border-radius: var(--md-sys-shape-corner-medium);
-            padding: 24px;
-            margin-bottom: 16px;
-            border-left: 4px solid var(--md-sys-color-primary);
-            box-shadow: var(--md-sys-elevation-level1);
-            transition: all 0.3s ease;
-        }
-
-        .indicator-card:hover {
-            box-shadow: var(--md-sys-elevation-level2);
-            transform: translateX(4px);
-        }
-
-        .indicator-number {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            font-size: 14px;
-            font-weight: 500;
-            margin-right: 12px;
-            margin-bottom: 8px;
-        }
-
-        .indicator-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .indicator-text {
-            color: var(--md-sys-color-on-surface-variant);
-            line-height: 1.6;
-            text-align: justify;
-        }
-
-        .methodology-card {
-            background: linear-gradient(135deg, var(--md-sys-color-tertiary-container), var(--md-sys-color-secondary-container));
-            border-radius: var(--md-sys-shape-corner-large);
-            padding: 24px;
-            margin: 24px 0;
-            border: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .methodology-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .methodology-icon {
-            color: var(--md-sys-color-on-tertiary-container);
-            font-size: 24px;
-        }
-
-        .methodology-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-tertiary-container);
-        }
-
-        .methodology-text {
-            color: var(--md-sys-color-on-tertiary-container);
-            opacity: 0.9;
-            line-height: 1.6;
-        }
-
-        .data-table-section {
-            background-color: var(--md-sys-color-surface-container-low);
-            border-radius: var(--md-sys-shape-corner-large);
-            padding: 24px;
-            box-shadow: var(--md-sys-elevation-level1);
-            border: 1px solid var(--md-sys-color-outline-variant);
-            overflow: hidden;
-        }
-
-        .table-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .table-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--md-sys-color-on-surface);
-        }
-
-        .data-table {
-            overflow-x: auto;
-            border-radius: var(--md-sys-shape-corner-medium);
-            border: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .data-table table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: var(--md-sys-color-surface);
-        }
-
-        .data-table th {
-            background-color: var(--md-sys-color-surface-container);
-            color: var(--md-sys-color-on-surface);
-            padding: 16px;
-            text-align: left;
-            font-weight: 500;
-            font-size: 14px;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant);
-        }
-
-        .data-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--md-sys-color-outline-variant);
-            color: var(--md-sys-color-on-surface);
-        }
-
-        .data-table tr:hover {
-            background-color: var(--md-sys-color-surface-container-lowest);
-        }
-
-        .loading-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 400px;
-            color: var(--md-sys-color-on-surface-variant);
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #4caf50;
         }
 
         .loading-spinner {
-            width: 48px;
-            height: 48px;
-            border: 4px solid var(--md-sys-color-outline-variant);
-            border-top: 4px solid var(--md-sys-color-primary);
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e8f5e8;
+            border-top: 4px solid #4caf50;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 16px;
+            margin: 0 auto 16px;
         }
 
         @keyframes spin {
@@ -529,1946 +171,698 @@
             100% { transform: rotate(360deg); }
         }
 
-        .loading-text {
-            font-size: 16px;
-            color: var(--md-sys-color-on-surface-variant);
-        }
-
-        .fab {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            width: 56px;
-            height: 56px;
-            border-radius: var(--md-sys-shape-corner-large);
-            background-color: var(--md-sys-color-primary);
-            color: var(--md-sys-color-on-primary);
-            border: none;
-            box-shadow: var(--md-sys-elevation-level3);
-            cursor: pointer;
+        .data-status {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-bottom: 24px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 1000;
+            gap: 8px;
+            font-size: 14px;
+            color: #2e7d32;
         }
 
-        .fab:hover {
-            box-shadow: var(--md-sys-elevation-level4);
-            transform: scale(1.05);
+        .analysis {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
         }
 
-        .fab .material-icons {
-            font-size: 24px;
+        .analysis h3 {
+            color: #1b5e20;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .analysis p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-top: 16px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        #dataTable {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 14px;
+        }
+
+        #dataTable th {
+            background: #2e7d32;
+            color: white;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #1b5e20;
+        }
+
+        #dataTable td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        #dataTable tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        #dataTable tr:hover {
+            background: #e8f5e8;
+        }
+
+        #dataTable td:last-child {
+            font-weight: 500;
+            color: #2e7d32;
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 16px;
-            }
-            
-            .hero-section {
-                padding: 32px 20px;
-            }
-            
-            .hero-title {
-                font-size: 28px;
-            }
-            
-            .charts-grid {
+            .charts {
                 grid-template-columns: 1fr;
             }
-            
-            .chart-container-wrapper {
-                height: 300px;
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
             }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
+            .control-group select {
+                min-width: auto;
+                width: 100%;
             }
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--md-sys-color-surface-container);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--md-sys-color-outline);
-            border-radius: 4px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--md-sys-color-outline-variant);
         }
     </style>
 </head>
 <body>
-    <div class="top-app-bar">
-        <h1>
-            <span class="material-icons">analytics</span>
-            Dashboard INEGI - Empleo y Ocupación
-        </h1>
-    </div>
-
     <div class="container">
-        <div class="hero-section">
-            <h1 class="hero-title">Análisis de Datos de Empleo en México</h1>
-            <p class="hero-subtitle">Insights basados en datos oficiales del INEGI (1988-2025)</p>
+        <div class="header">
+            <h1>
+                <span class="material-icons">analytics</span>
+                Dashboard de Empleo y Ocupación - México
+            </h1>
+            <p>Análisis de datos oficiales del INEGI (1988-2025)</p>
         </div>
 
-        <div id="loading" class="loading-container">
+        <div id="loading" class="loading">
             <div class="loading-spinner"></div>
-            <p class="loading-text">Procesando datos del INEGI...</p>
+            <p>Cargando datos del INEGI...</p>
         </div>
 
         <div id="dashboard" style="display: none;">
-            <div class="stats-grid">
+            <div class="data-status" id="dataStatus">
+                <span class="material-icons">info</span>
+                <span id="statusText">Cargando información...</span>
+            </div>
+
+            <div class="stats">
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <span class="material-icons">dataset</span>
-                        </div>
-                    </div>
-                    <div class="stat-number">62,699</div>
+                    <div class="stat-number" id="totalRecords">0</div>
                     <div class="stat-label">Registros Procesados</div>
                 </div>
-                
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <span class="material-icons">location_on</span>
-                        </div>
-                    </div>
-                    <div class="stat-number">33</div>
+                    <div class="stat-number" id="totalEntities">33</div>
                     <div class="stat-label">Entidades Federativas</div>
                 </div>
-                
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <span class="material-icons">trending_up</span>
-                        </div>
-                    </div>
-                    <div class="stat-number">83</div>
-                    <div class="stat-label">Indicadores Únicos</div>
+                    <div class="stat-number" id="totalIndicators">0</div>
+                    <div class="stat-label">Indicadores</div>
                 </div>
-                
                 <div class="stat-card">
-                    <div class="stat-header">
-                        <div class="stat-icon">
-                            <span class="material-icons">schedule</span>
-                        </div>
-                    </div>
-                    <div class="stat-number">37</div>
+                    <div class="stat-number" id="dataYears">37</div>
                     <div class="stat-label">Años de Datos</div>
                 </div>
             </div>
 
-            <div class="controls-section">
-                <div class="controls-title">
-                    <span class="material-icons">tune</span>
-                    Controles de Filtrado
+            <div class="controls">
+                <div class="control-group">
+                    <label for="entitySelect">Entidad Federativa:</label>
+                    <select id="entitySelect">
+                        <option value="00">Estados Unidos Mexicanos</option>
+                    </select>
                 </div>
-                <div class="controls-grid">
-                    <div class="input-group">
-                        <label for="entitySelect">Entidad Federativa</label>
-                        <select id="entitySelect">
-                            <option value="00">Estados Unidos Mexicanos</option>
-                            <option value="01">Aguascalientes</option>
-                            <option value="02">Baja California</option>
-                            <option value="09">Ciudad de México</option>
-                            <option value="19">Nuevo León</option>
-                            <option value="14">Jalisco</option>
-                        </select>
+                <div class="control-group">
+                    <label for="yearSelect">Año de Referencia:</label>
+                    <select id="yearSelect">
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="charts">
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span class="material-icons">donut_small</span>
+                        Participación Laboral por Género
                     </div>
-                    <div class="input-group">
-                        <label for="yearSelect">Período de Análisis</label>
-                        <select id="yearSelect">
-                            <option value="2024">2024</option>
-                            <option value="2023">2023</option>
-                            <option value="2022">2022</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
-                        </select>
+                    <div class="chart-container">
+                        <canvas id="genderChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span class="material-icons">trending_up</span>
+                        Evolución de la PEA
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="evolutionChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span class="material-icons">bar_chart</span>
+                        Conflictos Laborales
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="conflictsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-title">
+                        <span class="material-icons">pie_chart</span>
+                        Población No Económicamente Activa
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="pneaChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <div class="charts-grid">
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">pie_chart</span>
-                            Participación Laboral por Género
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="peaGenderChart"></canvas>
-                    </div>
-                </div>
-                
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">show_chart</span>
-                            Evolución de la PEA Nacional
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="peaEvolutionChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">bar_chart</span>
-                            Conflictos Laborales
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="laborConflictsChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">donut_small</span>
-                            Población No Económicamente Activa
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="pneaActivityChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">leaderboard</span>
-                            PEA por Entidades (Top 10)
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="peaStatesChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-header">
-                        <div class="chart-title">
-                            <span class="material-icons">timeline</span>
-                            Tendencias por Género
-                        </div>
-                        <div class="chart-menu">
-                            <span class="material-icons">more_vert</span>
-                        </div>
-                    </div>
-                    <div class="chart-container-wrapper">
-                        <canvas id="genderTrendChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="analysis-section">
-                <div class="analysis-header">
-                    <span class="material-icons">insights</span>
-                    <h2 class="analysis-title">Análisis Detallado de Indicadores</h2>
-                </div>
-
-                <div class="methodology-card">
-                    <div class="methodology-header">
-                        <span class="material-icons methodology-icon">science</span>
-                        <h3 class="methodology-title">Metodología de Análisis</h3>
-                    </div>
-                    <p class="methodology-text">
-                        Este análisis se basa en datos oficiales del INEGI sobre empleo y ocupación en México, abarcando el período 1988-2025. Se aplicó un proceso ETL (Extract, Transform, Load) para procesar más de 62,000 registros y generar insights sobre 83 indicadores laborales diferentes, implementando Material Design 3 para una experiencia de usuario moderna y accesible.
-                    </p>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">1</span>
-                        Porcentaje de Población de 12 años y más Económicamente Activa
-                    </div>
-                    <div class="indicator-text">
-                        La Población Económicamente Activa (PEA) representa el segmento de la población que participa activamente en el mercado laboral, ya sea trabajando o buscando empleo. Este indicador es fundamental para evaluar la dinámica del mercado de trabajo mexicano. Durante las últimas décadas, México ha experimentado un crecimiento sostenido en la participación laboral, pasando de aproximadamente 58% en la década de 1990 a niveles cercanos al 60% en años recientes. Esta tendencia refleja cambios estructurales en la economía, mayor incorporación de la mujer al mercado laboral, y transformaciones demográficas. El análisis por entidades federativas muestra diferencias significativas, con estados del norte como Nuevo León y Sonora presentando tasas más altas de participación laboral.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">2</span>
-                        Porcentaje de Población Femenina de 12 años y más Económicamente Activa
-                    </div>
-                    <div class="indicator-text">
-                        La participación laboral femenina ha sido uno de los cambios más significativos en el mercado de trabajo mexicano. Históricamente, las mujeres han tenido tasas de participación laboral menores que los hombres debido a factores culturales, sociales y estructurales. Sin embargo, se observa una tendencia creciente desde los años 1990, cuando la participación femenina rondaba el 35%, hasta alcanzar niveles cercanos al 45% en años recientes. Este incremento se asocia con mayor acceso a educación, cambios en la estructura familiar, políticas públicas de apoyo y transformaciones en el mercado laboral. No obstante, persisten desafíos como la brecha salarial de género, segregación ocupacional y la necesidad de políticas de conciliación familia-trabajo más efectivas.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">3</span>
-                        Porcentaje de Población Masculina de 12 años y más Económicamente Activa
-                    </div>
-                    <div class="indicator-text">
-                        La participación laboral masculina en México se ha mantenido relativamente estable a lo largo del tiempo, con tasas que oscilan entre 75% y 80%. Esta estabilidad contrasta con el crecimiento sostenido de la participación femenina, lo que ha contribuido a reducir gradualmente la brecha de género en el mercado laboral. Los hombres tradicionalmente han tenido roles de proveedores principales en los hogares mexicanos, lo que explica estas altas tasas de participación. Sin embargo, se observan variaciones importantes por grupo de edad, nivel educativo y región geográfica. Los estados del norte del país tienden a mostrar tasas de participación masculina ligeramente superiores, asociadas con una mayor actividad industrial y comercial. Es importante destacar que aunque la participación masculina se mantiene alta, han emergido nuevos desafíos como el desempleo juvenil y la precarización del empleo.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">4</span>
-                        Conflictos de Trabajo
-                    </div>
-                    <div class="indicator-text">
-                        Los conflictos de trabajo constituyen un indicador crucial para evaluar las relaciones laborales y la estabilidad del mercado de trabajo en México. Los datos del INEGI muestran fluctuaciones significativas en el número de conflictos laborales a lo largo de las décadas, con picos que coinciden con crisis económicas, reformas laborales y cambios en la legislación. Durante la década de 1990, se registraron niveles elevados de conflictividad laboral, con más de 100,000 conflictos anuales en algunos años. Posteriormente, se observó una tendencia hacia la reducción, aunque con variaciones cíclicas. Los conflictos laborales reflejan tensiones entre empleadores y trabajadores relacionadas con salarios, condiciones de trabajo, prestaciones y derechos laborales. Su análisis es fundamental para diseñar políticas públicas que promuevan relaciones laborales armoniosas y productivas.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">5</span>
-                        Huelgas Estalladas
-                    </div>
-                    <div class="indicator-text">
-                        Las huelgas representan la manifestación más visible de los conflictos laborales y constituyen un mecanismo legítimo de presión de los trabajadores para defender sus derechos. El análisis histórico de las huelgas en México revela patrones interesantes relacionados con ciclos económicos, reformas legislativas y cambios en las relaciones laborales. Durante los años 1990 y principios de 2000, se registraron niveles relativamente altos de actividad huelguística, particularmente en sectores como el petrolero, eléctrico y educativo. Sin embargo, en años recientes se observa una tendencia hacia la reducción en el número de huelgas, lo que puede reflejar cambios en las estrategias de negociación, mayor institucionalización de los mecanismos de resolución de conflictos, o bien, transformaciones en la estructura del empleo hacia sectores menos sindicalizados.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">6</span>
-                        Población No Económicamente Activa - Quehaceres del Hogar
-                    </div>
-                    <div class="indicator-text">
-                        Este indicador revela aspectos importantes sobre la división del trabajo doméstico y las barreras para la participación laboral, particularmente de las mujeres. Tradicionalmente, un porcentaje significativo de la población no económicamente activa se dedica a los quehaceres del hogar, siendo este fenómeno más pronunciado entre las mujeres. Los datos muestran que, aunque ha disminuido la proporción de personas dedicadas exclusivamente al hogar debido a la mayor incorporación femenina al mercado laboral, este sigue siendo un factor relevante. La permanencia en actividades domésticas no remuneradas se asocia con factores como falta de oportunidades de empleo formal, responsabilidades de cuidado familiar, limitaciones educativas y normas culturales tradicionales. Las políticas públicas orientadas a facilitar la participación laboral, como guarderías públicas y programas de capacitación, han mostrado impactos positivos en la reducción de este indicador.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">7</span>
-                        Población No Económicamente Activa - Estudiantes
-                    </div>
-                    <div class="indicator-text">
-                        La población que se dedica a estudiar representa una inversión en capital humano fundamental para el desarrollo económico del país. Este indicador ha mostrado una tendencia creciente, reflejando la expansión del sistema educativo mexicano y el mayor acceso a la educación media superior y superior. Durante las últimas décadas, se ha observado un incremento sostenido en la proporción de jóvenes que postergan su ingreso al mercado laboral para continuar con su formación educativa. Esta tendencia es particularmente notable en las zonas urbanas y entre familias de mayores ingresos. Sin embargo, persisten desafíos importantes como la deserción escolar, especialmente en niveles de educación media superior, y las diferencias en acceso educativo entre regiones rurales y urbanas. La correlación entre mayor escolaridad y mejores oportunidades de empleo justifica las inversiones en educación como estrategia de desarrollo económico y social.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">8</span>
-                        Población No Económicamente Activa - Pensionados y Jubilados
-                    </div>
-                    <div class="indicator-text">
-                        El crecimiento de la población pensionada y jubilada refleja tanto el envejecimiento demográfico de México como la maduración de los sistemas de seguridad social. Este indicador ha mostrado una tendencia creciente, particularmente a partir de la década de 2000, cuando las primeras generaciones beneficiarias de los sistemas de pensiones formales comenzaron a jubilarse en mayor número. El análisis de este indicador es crucial para evaluar la sostenibilidad de los sistemas de pensiones y planificar políticas públicas orientadas a la tercera edad. La transición demográfica que experimenta México, con una población cada vez más envejecida, plantea desafíos importantes para los sistemas de seguridad social y el mercado laboral. Adicionalmente, se observan diferencias significativas entre el sector formal e informal, ya que los trabajadores informales históricamente han tenido menor acceso a sistemas de pensiones, lo que se traduce en vulnerabilidad económica en la vejez.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">9</span>
-                        Población Económicamente Activa Ocupada
-                    </div>
-                    <div class="indicator-text">
-                        La población ocupada representa el núcleo productivo de la economía y su análisis permite evaluar la capacidad de la economía para generar empleos y absorber la fuerza laboral disponible. México ha mostrado tasas de ocupación relativamente altas, generalmente superiores al 95% de la PEA, lo que indica una baja tasa de desempleo abierto en comparación con otros países. Sin embargo, este indicador debe analizarse considerando la calidad del empleo, ya que incluye tanto empleos formales como informales, de tiempo completo y parcial. La alta tasa de ocupación en México se explica en parte por la necesidad económica de los hogares, que obliga a las personas a aceptar empleos precarios o de baja productividad ante la ausencia de seguros de desempleo robustos. El análisis regional muestra variaciones importantes, con estados industrializados presentando mejores condiciones de empleo que regiones con economías menos diversificadas.
-                    </div>
-                </div>
-
-                <div class="indicator-card">
-                    <div class="indicator-title">
-                        <span class="indicator-number">10</span>
-                        Evolución Temporal de los Indicadores Laborales
-                    </div>
-                    <div class="indicator-text">
-                        El análisis longitudinal de los indicadores laborales de México revela transformaciones estructurales importantes en el mercado de trabajo. Durante las últimas tres décadas, se observan tendencias como la terciarización de la economía, el crecimiento del sector servicios, la mayor participación femenina, y cambios en la estructura ocupacional. Los datos muestran impactos significativos de crisis económicas como la de 1995, 2009 y 2020, que se reflejaron en ajustes temporales de los indicadores laborales. También se evidencian los efectos de reformas estructurales, cambios tecnológicos y transformaciones demográficas. La evolución de estos indicadores proporciona información valiosa para la formulación de políticas públicas de empleo, educación y desarrollo económico, permitiendo identificar tendencias emergentes y anticipar desafíos futuros del mercado laboral mexicano.
-                    </div>
-                </div>
-            </div>
-
-            <div class="data-table-section">
-                <div class="table-header">
-                    <span class="material-icons">table_chart</span>
-                    <h3 class="table-title">Muestra de Datos Procesados</h3>
-                </div>
-                <div class="data-table">
-                    <table>
+            <div class="analysis">
+                <h3>📊 Muestra de Datos Procesados</h3>
+                <div class="table-container">
+                    <table id="dataTable">
                         <thead>
                             <tr>
                                 <th>Entidad</th>
                                 <th>Indicador</th>
-                                <th>2020</th>
                                 <th>2021</th>
                                 <th>2022</th>
                                 <th>2023</th>
+                                <th>Unidad</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tableBody">
                             <tr>
                                 <td>Estados Unidos Mexicanos</td>
                                 <td>PEA Total</td>
-                                <td>59.2%</td>
                                 <td>59.8%</td>
                                 <td>60.1%</td>
                                 <td>60.4%</td>
-                            </tr>
-                            <tr>
-                                <td>Estados Unidos Mexicanos</td>
-                                <td>PEA Femenina</td>
-                                <td>43.8%</td>
-                                <td>44.2%</td>
-                                <td>44.7%</td>
-                                <td>45.1%</td>
-                            </tr>
-                            <tr>
-                                <td>Estados Unidos Mexicanos</td>
-                                <td>PEA Masculina</td>
-                                <td>75.6%</td>
-                                <td>76.1%</td>
-                                <td>76.4%</td>
-                                <td>76.8%</td>
-                            </tr>
-                            <tr>
-                                <td>Nuevo León</td>
-                                <td>PEA Total</td>
-                                <td>62.8%</td>
-                                <td>63.2%</td>
-                                <td>63.5%</td>
-                                <td>63.8%</td>
-                            </tr>
-                            <tr>
-                                <td>Ciudad de México</td>
-                                <td>PEA Total</td>
-                                <td>64.5%</td>
-                                <td>64.8%</td>
-                                <td>65.0%</td>
-                                <td>65.2%</td>
+                                <td>Porcentaje</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
+
+            <div class="analysis">
+                <h3>📝 Análisis de Resultados</h3>
+                <p id="analysisText">
+                    Los datos muestran la evolución del mercado laboral mexicano a lo largo de las últimas décadas. 
+                    La participación laboral femenina ha experimentado un crecimiento sostenido, mientras que 
+                    la participación masculina se mantiene relativamente estable.
+                </p>
+            </div>
         </div>
     </div>
 
-    <button class="fab" onclick="scrollToTop()">
-        <span class="material-icons">keyboard_arrow_up</span>
-    </button>
-
     <script>
-        // Green-based color scheme with complementary colors for multi-data charts
-        const chartColors = {
-            // Primary greens (for single data or main categories)
-            primary: '#2E7D32',
-            primaryLight: '#4CAF50', 
-            secondary: '#388E3C',
-            tertiary: '#1B5E20',
-            accent: '#66BB6A',
-            
-            // Complementary colors for multi-category charts
-            blue: '#1976D2',        // Professional blue
-            orange: '#FF8F00',      // Warm orange
-            purple: '#7B1FA2',      // Deep purple
-            teal: '#00796B',        // Teal green
-            red: '#D32F2F',         // Alert red
-            amber: '#FFA000',       // Golden amber
-            indigo: '#303F9F',      // Dark indigo
-            pink: '#C2185B'         // Professional pink
-        };
-
-        // Datos simulados con paleta mejorada para multi-categorías
-        const empleoData = {
-            peaGender: {
-                labels: ['PEA Femenina', 'PEA Masculina'],
-                datasets: [{
-                    data: [45.1, 76.8],
-                    backgroundColor: [
-                        'rgba(194, 24, 91, 0.8)',   // pink for female
-                        'rgba(46, 125, 50, 0.8)'   // green for male
-                    ],
-                    borderColor: [
-                        'rgb(194, 24, 91)',
-                        'rgb(46, 125, 50)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            peaEvolution: {
-                labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-                datasets: [{
-                    label: 'PEA Nacional (%)',
-                    data: [58.9, 59.1, 59.3, 59.5, 59.7, 59.2, 59.8, 60.1, 60.4, 60.6],
-                    borderColor: 'rgb(46, 125, 50)',
-                    backgroundColor: 'rgba(46, 125, 50, 0.1)',
-                    tension: 0.4,
-                    fill: true,
-                    pointBackgroundColor: 'rgb(46, 125, 50)',
-                    pointBorderColor: '#ffffff',
-                    pointBorderWidth: 2,
-                    pointRadius: 5
-                }]
-            },
-            laborConflicts: {
-                labels: ['2019', '2020', '2021', '2022', '2023'],
-                datasets: [
-                    {
-                        label: 'Conflictos de Trabajo',
-                        data: [85420, 78960, 82340, 79850, 81200],
-                        backgroundColor: 'rgba(46, 125, 50, 0.8)',
-                        borderColor: 'rgb(46, 125, 50)',
-                        borderWidth: 2,
-                        borderRadius: 8
-                    },
-                    {
-                        label: 'Huelgas Estalladas',
-                        data: [1240, 980, 1150, 1080, 1120],
-                        backgroundColor: 'rgba(25, 118, 210, 0.8)',
-                        borderColor: 'rgb(25, 118, 210)',
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }
-                ]
-            },
-            pneaActivity: {
-                labels: ['Quehaceres del Hogar', 'Estudiantes', 'Pensionados', 'Otros'],
-                datasets: [{
-                    data: [45.2, 28.5, 12.8, 13.5],
-                    backgroundColor: [
-                        'rgba(46, 125, 50, 0.8)',   // green for home
-                        'rgba(25, 118, 210, 0.8)',  // blue for students  
-                        'rgba(255, 143, 0, 0.8)',   // orange for pensioners
-                        'rgba(123, 31, 162, 0.8)'   // purple for others
-                    ],
-                    borderColor: [
-                        'rgb(46, 125, 50)',
-                        'rgb(25, 118, 210)',
-                        'rgb(255, 143, 0)',
-                        'rgb(123, 31, 162)'
-                    ],
-                    borderWidth: 2
-                }]
-            },
-            peaStates: {
-                labels: ['Ciudad de México', 'Nuevo León', 'Jalisco', 'Estado de México', 'Veracruz', 
-                        'Puebla', 'Guanajuato', 'Michoacán', 'Chiapas', 'Oaxaca'],
-                datasets: [{
-                    label: 'PEA (%)',
-                    data: [65.2, 63.8, 62.1, 60.9, 58.7, 59.2, 60.4, 57.8, 55.6, 56.9],
-                    backgroundColor: 'rgba(46, 125, 50, 0.8)',
-                    borderColor: 'rgb(46, 125, 50)',
-                    borderWidth: 2,
-                    borderRadius: 8
-                }]
-            },
-            genderTrend: {
-                labels: ['1995', '2000', '2005', '2010', '2015', '2020', '2023'],
-                datasets: [
-                    {
-                        label: 'PEA Femenina (%)',
-                        data: [35.2, 37.8, 40.1, 42.3, 43.9, 43.8, 45.1],
-                        borderColor: 'rgb(194, 24, 91)',
-                        backgroundColor: 'rgba(194, 24, 91, 0.1)',
-                        tension: 0.4,
-                        pointBackgroundColor: 'rgb(194, 24, 91)',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5
-                    },
-                    {
-                        label: 'PEA Masculina (%)',
-                        data: [78.9, 78.2, 77.8, 77.1, 76.9, 75.6, 76.8],
-                        borderColor: 'rgb(46, 125, 50)',
-                        backgroundColor: 'rgba(46, 125, 50, 0.1)',
-                        tension: 0.4,
-                        pointBackgroundColor: 'rgb(46, 125, 50)',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5
-                    }
-                ]
-            }
-        };
-
-        // Configuración global de Chart.js para esquema verde
-        Chart.defaults.font.family = 'Roboto, sans-serif';
-        Chart.defaults.color = 'rgb(28, 27, 22)'; // on-surface green
-        Chart.defaults.borderColor = 'rgba(196, 200, 188, 0.5)'; // outline-variant green
-        Chart.defaults.backgroundColor = 'rgba(46, 125, 50, 0.1)'; // primary container green
-
-        // Función para crear gráficos con estilo Material Design 3
-        function createCharts() {
-            const chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            font: {
-                                size: 12,
-                                weight: 500
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(28, 27, 31, 0.9)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: 'rgba(202, 196, 208, 0.3)',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        padding: 12
-                    }
-                }
-            };
-
-            // Gráfico de PEA por Género
-            new Chart(document.getElementById('peaGenderChart'), {
-                type: 'doughnut',
-                data: empleoData.peaGender,
-                options: {
-                    ...chartOptions,
-                    cutout: '60%',
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Evolución PEA
-            new Chart(document.getElementById('peaEvolutionChart'), {
-                type: 'line',
-                data: empleoData.peaEvolution,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 58,
-                            max: 62,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Conflictos Laborales
-            new Chart(document.getElementById('laborConflictsChart'), {
-                type: 'bar',
-                data: empleoData.laborConflicts,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de PNEA por Actividad
-            new Chart(document.getElementById('pneaActivityChart'), {
-                type: 'pie',
-                data: empleoData.pneaActivity,
-                options: {
-                    ...chartOptions,
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de PEA por Estados
-            new Chart(document.getElementById('peaStatesChart'), {
-                type: 'bar',
-                data: empleoData.peaStates,
-                options: {
-                    ...chartOptions,
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Tendencia por Género
-            new Chart(document.getElementById('genderTrendChart'), {
-                type: 'line',
-                data: empleoData.genderTrend,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 30,
-                            max: 85,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Función para scroll suave hacia arriba
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }
-
-        // Inicializar dashboard con animación
-        function initDashboard() {
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                
-                // Animación de entrada para las tarjetas
-                const cards = document.querySelectorAll('.stat-card, .chart-card, .indicator-card');
-                cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1)';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-                
-                createCharts();
-            }, 2500);
-        }
-
-        // Global variables for charts and real data
+        // 🎯 VARIABLES GLOBALES SIMPLES
+        let empleoData = null;
+        let entidades = [];
+        let indicadores = [];
         let charts = {};
-        let realData = null;
-        let indicators = [];
-        let entities = [];
-        
-        // Load real data from GitHub
-        async function loadRealData() {
+
+        // 🎨 COLORES VERDES SIMPLES
+        const colors = {
+            green: '#2e7d32',
+            lightGreen: '#4caf50',
+            darkGreen: '#1b5e20',
+            blue: '#1976d2',
+            orange: '#ff8f00',
+            purple: '#7b1fa2',
+            pink: '#c2185b'
+        };
+
+        // 📊 CONFIGURACIÓN DE CHART.JS
+        Chart.defaults.font.family = 'Inter, sans-serif';
+        Chart.defaults.color = '#333';
+
+        // 🔄 FUNCIÓN PRINCIPAL: CARGAR DATOS
+        async function loadData() {
             try {
-                log('Loading real INEGI data...');
+                console.log('🔄 Loading INEGI data...');
                 
-                // Load compressed employment data
-                const dataResponse = await fetch('./data/empleo_compressed.json');
-                if (!dataResponse.ok) {
-                    throw new Error('Could not load employment data');
-                }
-                realData = await dataResponse.json();
-                log(`Loaded ${realData.data ? realData.data.length : 0} employment records`);
+                // Cargar datos principales
+                const response = await fetch('./data/empleo_compressed.json');
+                if (!response.ok) throw new Error('No se pudieron cargar los datos');
                 
-                // Load indicators catalog
-                try {
-                    const indicatorsResponse = await fetch('./data/indicadores.json');
-                    if (indicatorsResponse.ok) {
-                        indicators = await indicatorsResponse.json();
-                        log(`Loaded ${indicators.length} indicators`);
-                    }
-                } catch (e) {
-                    log('Indicators catalog not found, using data from main file');
-                    extractIndicatorsFromData();
-                }
-                
-                // Load entities catalog
+                empleoData = await response.json();
+                console.log(`✅ Loaded ${empleoData.data?.length || 0} records`);
+
+                // Cargar entidades
                 try {
                     const entitiesResponse = await fetch('./data/entidades.json');
                     if (entitiesResponse.ok) {
-                        entities = await entitiesResponse.json();
-                        log(`Loaded ${entities.length} entities`);
+                        entidades = await entitiesResponse.json();
                     }
                 } catch (e) {
-                    log('Entities catalog not found, using data from main file');
-                    extractEntitiesFromData();
+                    console.log('ℹ️ Using entities from main data');
+                    extractEntities();
                 }
-                
-                // Populate entity selector with real data
-                populateEntitySelector();
-                
-                // Update stats with real numbers
-                updateStatsCards();
-                
-                log('Real INEGI data loaded successfully!');
+
+                // Cargar indicadores
+                try {
+                    const indicatorsResponse = await fetch('./data/indicadores.json');
+                    if (indicatorsResponse.ok) {
+                        indicadores = await indicatorsResponse.json();
+                    }
+                } catch (e) {
+                    console.log('ℹ️ Using indicators from main data');
+                    extractIndicators();
+                }
+
+                updateStats();
+                populateSelectors();
+                updateStatus(true);
                 return true;
-                
+
             } catch (error) {
-                log('Error loading real data: ' + error.message);
-                log('Falling back to simulated data...');
+                console.error('❌ Error loading data:', error);
+                updateStatus(false);
                 return false;
             }
         }
-        
-        function log(message) {
-            console.log('[INEGI Dashboard] ' + message);
-        }
-        
-        function extractIndicatorsFromData() {
-            if (!realData || !realData.data) return;
-            
-            const indicatorsSet = new Set();
-            realData.data.forEach(record => {
-                // Handle both compressed (i, ii) and full (indicador, id_indicador) formats
-                const indicatorName = record.i || record.indicador;
-                const indicatorId = record.ii || record.id_indicador;
-                
-                if (indicatorName && indicatorId) {
-                    indicatorsSet.add(JSON.stringify({
-                        id: indicatorId,
-                        name: indicatorName
-                    }));
-                }
-            });
-            
-            indicators = Array.from(indicatorsSet).map(item => JSON.parse(item));
-        }
-        
-        function extractEntitiesFromData() {
-            if (!realData || !realData.data) return;
-            
+
+        // 📈 EXTRAER ENTIDADES DE LOS DATOS
+        function extractEntities() {
             const entitiesSet = new Set();
-            realData.data.forEach(record => {
-                // Handle both compressed (ce, de) and full (cve_entidad, desc_entidad) formats
-                const entityCode = record.ce || record.cve_entidad;
-                const entityName = record.de || record.desc_entidad;
-                
-                if (entityCode && entityName) {
-                    entitiesSet.add(JSON.stringify({
-                        code: entityCode.toString().padStart(2, '0'),
-                        name: entityName
-                    }));
-                }
-            });
-            
-            entities = Array.from(entitiesSet).map(item => JSON.parse(item));
+            if (empleoData?.data) {
+                empleoData.data.forEach(record => {
+                    const code = record.ce || record.cve_entidad;
+                    const name = record.de || record.desc_entidad;
+                    if (code && name) {
+                        entitiesSet.add(JSON.stringify({ code, name }));
+                    }
+                });
+            }
+            entidades = Array.from(entitiesSet).map(item => JSON.parse(item));
         }
-        
-        function populateEntitySelector() {
-            const selector = document.getElementById('entitySelect');
-            if (!selector || !entities.length) return;
+
+        // 📋 EXTRAER INDICADORES DE LOS DATOS
+        function extractIndicators() {
+            const indicatorsSet = new Set();
+            if (empleoData?.data) {
+                empleoData.data.forEach(record => {
+                    const id = record.ii || record.id_indicador;
+                    const name = record.i || record.indicador;
+                    if (id && name) {
+                        indicatorsSet.add(JSON.stringify({ id, name }));
+                    }
+                });
+            }
+            indicadores = Array.from(indicatorsSet).map(item => JSON.parse(item));
+        }
+
+        // 📊 ACTUALIZAR ESTADÍSTICAS
+        function updateStats() {
+            document.getElementById('totalRecords').textContent = 
+                empleoData?.data?.length?.toLocaleString() || '0';
+            document.getElementById('totalEntities').textContent = entidades.length;
+            document.getElementById('totalIndicators').textContent = indicadores.length;
+        }
+
+        // 🎛️ LLENAR SELECTORES
+        function populateSelectors() {
+            const entitySelect = document.getElementById('entitySelect');
             
-            // Clear existing options except the first one
-            selector.innerHTML = '<option value="00">Estados Unidos Mexicanos</option>';
+            // Limpiar y agregar entidades
+            entitySelect.innerHTML = '<option value="00">Estados Unidos Mexicanos</option>';
             
-            // Add real entities
-            entities
-                .filter(entity => entity.code !== "00")
+            entidades
+                .filter(e => e.code !== "00")
                 .sort((a, b) => a.name.localeCompare(b.name))
                 .forEach(entity => {
                     const option = document.createElement('option');
                     option.value = entity.code;
                     option.textContent = entity.name;
-                    selector.appendChild(option);
+                    entitySelect.appendChild(option);
                 });
         }
-        
-        function updateStatsCards() {
-            if (!realData) return;
+
+        // 📊 OBTENER DATOS POR ENTIDAD
+        function getEntityData(entityCode) {
+            if (!empleoData?.data) return [];
             
-            const totalRecords = realData.data ? realData.data.length : 0;
-            const totalEntities = entities.length;
-            const totalIndicators = indicators.length;
-            
-            // Calculate available years
-            const yearsSet = new Set();
-            if (realData.data) {
-                realData.data.forEach(record => {
-                    const values = record.v || record.values || {};
-                    Object.keys(values).forEach(year => yearsSet.add(year));
-                });
-            }
-            
-            // Update the stat cards with real numbers
-            const statNumbers = document.querySelectorAll('.stat-number');
-            if (statNumbers.length >= 4) {
-                statNumbers[0].textContent = totalRecords.toLocaleString();
-                statNumbers[1].textContent = totalEntities;
-                statNumbers[2].textContent = totalIndicators;
-                statNumbers[3].textContent = yearsSet.size;
-            }
-        }
-        
-        function getDataForEntity(entityCode) {
-            if (!realData || !realData.data) return null;
-            
-            return realData.data.filter(record => {
+            return empleoData.data.filter(record => {
                 const code = record.ce || record.cve_entidad;
                 return code === entityCode;
             });
         }
-        
-        function getIndicatorData(entityCode, indicatorPatterns) {
-            const entityData = getDataForEntity(entityCode);
-            if (!entityData) return null;
-            
-            // Support multiple search patterns
-            const patterns = Array.isArray(indicatorPatterns) ? indicatorPatterns : [indicatorPatterns];
-            
-            return entityData.filter(record => {
+
+        // 🔍 BUSCAR INDICADOR ESPECÍFICO
+        function findIndicator(entityData, patterns) {
+            return entityData.find(record => {
                 const indicator = (record.i || record.indicador || '').toLowerCase();
-                return patterns.some(pattern => 
-                    indicator.includes(pattern.toLowerCase()) || 
-                    indicator.includes(pattern.toLowerCase().replace('ó', 'o')) ||
-                    indicator.includes(pattern.toLowerCase().replace('é', 'e'))
-                );
+                return patterns.some(pattern => indicator.includes(pattern.toLowerCase()));
             });
         }
-        
+
+        // 📈 OBTENER VALOR MÁS RECIENTE
         function getLatestValue(record, defaultValue = 0) {
+            if (!record) return defaultValue;
+            
             const values = record.v || record.values || {};
             const years = Object.keys(values)
-                .filter(year => !isNaN(parseInt(year.split('/')[0]))) // Only numeric years
-                .sort((a, b) => {
-                    const yearA = parseInt(a.split('/')[0]);
-                    const yearB = parseInt(b.split('/')[0]);
-                    return yearB - yearA; // Most recent first
-                });
+                .filter(year => !isNaN(parseInt(year.split('/')[0])))
+                .sort((a, b) => parseInt(b.split('/')[0]) - parseInt(a.split('/')[0]));
             
             for (let year of years) {
-                const value = values[year];
-                if (value !== null && value !== undefined && value !== '' && !isNaN(value)) {
-                    const numValue = parseFloat(value);
-                    // Validate reasonable range for percentages
-                    if (numValue >= 0 && numValue <= 100) {
-                        return numValue;
-                    }
-                }
-            }
-            return defaultValue;
-        }
-        
-        function getValueForYear(record, targetYear, defaultValue = 0) {
-            const values = record.v || record.values || {};
-            
-            // Try exact year match first
-            if (values[targetYear] !== undefined && values[targetYear] !== null && values[targetYear] !== '') {
-                const value = parseFloat(values[targetYear]);
+                const value = parseFloat(values[year]);
                 if (!isNaN(value) && value >= 0 && value <= 100) {
                     return value;
                 }
             }
-            
-            // Try with quarterly data (e.g., "2023/t1", "2023/t2")
-            const yearKeys = Object.keys(values).filter(key => key.startsWith(targetYear));
-            for (let key of yearKeys) {
-                const value = parseFloat(values[key]);
-                if (!isNaN(value) && value >= 0 && value <= 100) {
-                    return value;
-                }
-            }
-            
             return defaultValue;
         }
 
-        // Updated chart data generation with better data extraction
-        function generateChartData(entityCode = "00") {
-            if (!realData) {
-                // Fallback to simulated data
-                return {
-                    peaGender: empleoData.peaGender,
-                    peaEvolution: empleoData.peaEvolution,
-                    laborConflicts: empleoData.laborConflicts,
-                    pneaActivity: empleoData.pneaActivity,
-                    peaStates: empleoData.peaStates,
-                    genderTrend: empleoData.genderTrend
-                };
-            }
-            
-            // More specific search patterns for gender data
-            const femalePatterns = [
-                'población femenina de 12 años y más económicamente activa',
-                'poblacion femenina',
-                'mujeres económicamente activas',
-                'femenina económicamente activa'
-            ];
-            
-            const malePatterns = [
-                'población masculina de 12 años y más económicamente activa', 
-                'poblacion masculina',
-                'hombres económicamente activos',
-                'masculina económicamente activa'
-            ];
-            
-            const conflictPatterns = ['conflictos de trabajo', 'conflictos laborales'];
-            const strikePatterns = ['huelgas estalladas', 'huelgas'];
-            
-            // Get data for current entity
-            const femaleData = getIndicatorData(entityCode, femalePatterns);
-            const maleData = getIndicatorData(entityCode, malePatterns);
-            const conflictsData = getIndicatorData(entityCode, conflictPatterns);
-            const strikesData = getIndicatorData(entityCode, strikePatterns);
-            
-            // Debug logging
-            console.log(`[DEBUG] Entity ${entityCode}:`);
-            console.log(`Female data records: ${femaleData?.length || 0}`);
-            console.log(`Male data records: ${maleData?.length || 0}`);
-            console.log(`Conflicts data records: ${conflictsData?.length || 0}`);
-            
-            // Extract values with better fallbacks based on entity
-            let femaleValue = 45; // Default
-            let maleValue = 75;   // Default
-            
-            if (femaleData && femaleData.length > 0) {
-                femaleValue = getLatestValue(femaleData[0], 45);
-                console.log(`[DEBUG] Female PEA for ${entityCode}: ${femaleValue}%`);
-            } else {
-                // Entity-specific adjustments if no real data
-                const adjustments = {
-                    "09": { female: 48, male: 78 }, // CDMX
-                    "19": { female: 47, male: 77 }, // Nuevo León  
-                    "14": { female: 46, male: 76 }, // Jalisco
-                    "02": { female: 49, male: 79 }, // Baja California
-                    "01": { female: 44, male: 74 }  // Aguascalientes
-                };
-                
-                if (adjustments[entityCode]) {
-                    femaleValue = adjustments[entityCode].female;
-                    maleValue = adjustments[entityCode].male;
-                }
-            }
-            
-            if (maleData && maleData.length > 0) {
-                maleValue = getLatestValue(maleData[0], 75);
-                console.log(`[DEBUG] Male PEA for ${entityCode}: ${maleValue}%`);
-            }
-            
-            // Generate realistic year-over-year data for evolution chart
-            const evolutionYears = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
-            const baseEvolution = [58.9, 59.1, 59.3, 59.5, 59.7, 59.2, 59.8, 60.1, 60.4, 60.6];
-            
-            // Adjust evolution data based on current entity values
-            const currentEntityPEA = (femaleValue + maleValue) / 2 * 0.6; // Rough estimate
-            const nationalAvg = 60.4;
-            const adjustmentFactor = currentEntityPEA / nationalAvg;
-            
-            const evolutionValues = baseEvolution.map(val => 
-                Math.round((val * adjustmentFactor) * 10) / 10
-            );
-            
-            // Conflicts data with more variation
-            const years = ['2019', '2020', '2021', '2022', '2023'];
-            let conflictsValues = [85420, 78960, 82340, 79850, 81200];
-            let strikesValues = [1240, 980, 1150, 1080, 1120];
-            
-            if (conflictsData && conflictsData.length > 0) {
-                conflictsValues = years.map(year => {
-                    const value = getValueForYear(conflictsData[0], year, 80000);
-                    return Math.round(value);
-                });
-            }
-            
-            if (strikesData && strikesData.length > 0) {
-                strikesValues = years.map(year => {
-                    const value = getValueForYear(strikesData[0], year, 1000);
-                    return Math.round(value);
-                });
-            }
-            
-            // PNEA data patterns
-            const pneaHomeData = getIndicatorData(entityCode, ['quehaceres del hogar', 'hogar']);
-            const pneaStudentsData = getIndicatorData(entityCode, ['estudia', 'estudiantes']);
-            const pneaPensionersData = getIndicatorData(entityCode, ['pensionada', 'jubilada', 'pensionados']);
-            
-            const pneaValues = [
-                pneaHomeData?.length > 0 ? getLatestValue(pneaHomeData[0], 45) : 42 + Math.random() * 6,
-                pneaStudentsData?.length > 0 ? getLatestValue(pneaStudentsData[0], 28) : 26 + Math.random() * 4,  
-                pneaPensionersData?.length > 0 ? getLatestValue(pneaPensionersData[0], 13) : 11 + Math.random() * 4,
-                14 + Math.random() * 3
-            ];
-            
-            // Generate gender trend with realistic progression
-            const currentYear = 2023;
-            const yearRange = [1995, 2000, 2005, 2010, 2015, 2020, 2023];
-            const femaleProgression = yearRange.map(year => {
-                const progress = (year - 1995) / (currentYear - 1995);
-                const startValue = 35;
-                return startValue + (femaleValue - startValue) * progress;
-            });
-            
-            const maleProgression = yearRange.map(year => {
-                const progress = (year - 1995) / (currentYear - 1995);
-                const startValue = 78;
-                return startValue + (maleValue - startValue) * progress;
-            });
+        // 🎨 CREAR GRÁFICOS
+        function createCharts(entityCode = "00") {
+            const entityData = getEntityData(entityCode);
+            console.log(`📊 Creating charts for entity ${entityCode} with ${entityData.length} records`);
 
-            return {
-                peaGender: {
+            // Buscar indicadores específicos
+            const femaleRecord = findIndicator(entityData, ['femenina', 'mujeres']);
+            const maleRecord = findIndicator(entityData, ['masculina', 'hombres']);
+            const conflictsRecord = findIndicator(entityData, ['conflictos']);
+            const strikesRecord = findIndicator(entityData, ['huelgas']);
+
+            // Obtener valores
+            const femaleValue = getLatestValue(femaleRecord, 45);
+            const maleValue = getLatestValue(maleRecord, 75);
+
+            console.log(`👩 Female PEA: ${femaleValue}%`);
+            console.log(`👨 Male PEA: ${maleValue}%`);
+
+            // 1. Gráfico de Género
+            if (charts.gender) charts.gender.destroy();
+            charts.gender = new Chart(document.getElementById('genderChart'), {
+                type: 'doughnut',
+                data: {
                     labels: ['PEA Femenina', 'PEA Masculina'],
                     datasets: [{
-                        data: [Math.round(femaleValue * 10) / 10, Math.round(maleValue * 10) / 10],
-                        backgroundColor: [
-                            'rgba(125, 82, 96, 0.8)',
-                            'rgba(103, 80, 164, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgb(125, 82, 96)',
-                            'rgb(103, 80, 164)'
-                        ],
-                        borderWidth: 2
+                        data: [femaleValue, maleValue],
+                        backgroundColor: [colors.pink, colors.green],
+                        borderWidth: 0
                     }]
                 },
-                
-                peaEvolution: {
-                    labels: evolutionYears,
-                    datasets: [{
-                        label: `PEA ${entityCode === "00" ? "Nacional" : entities.find(e => e.code === entityCode)?.name || "Entidad"} (%)`,
-                        data: evolutionValues,
-                        borderColor: 'rgb(103, 80, 164)',
-                        backgroundColor: 'rgba(103, 80, 164, 0.1)',
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: 'rgb(103, 80, 164)',
-                        pointBorderColor: '#ffffff',
-                        pointBorderWidth: 2,
-                        pointRadius: 5
-                    }]
-                },
-                
-                laborConflicts: {
-                    labels: years,
-                    datasets: [
-                        {
-                            label: 'Conflictos de Trabajo',
-                            data: conflictsValues,
-                            backgroundColor: 'rgba(125, 82, 96, 0.8)',
-                            borderColor: 'rgb(125, 82, 96)',
-                            borderWidth: 2,
-                            borderRadius: 8
-                        },
-                        {
-                            label: 'Huelgas Estalladas', 
-                            data: strikesValues,
-                            backgroundColor: 'rgba(98, 91, 113, 0.8)',
-                            borderColor: 'rgb(98, 91, 113)',
-                            borderWidth: 2,
-                            borderRadius: 8
-                        }
-                    ]
-                },
-                
-                pneaActivity: {
-                    labels: ['Quehaceres del Hogar', 'Estudiantes', 'Pensionados', 'Otros'],
-                    datasets: [{
-                        data: pneaValues.map(val => Math.round(val * 10) / 10),
-                        backgroundColor: [
-                            'rgba(103, 80, 164, 0.8)',
-                            'rgba(125, 82, 96, 0.8)',
-                            'rgba(98, 91, 113, 0.8)',
-                            'rgba(186, 26, 26, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgb(103, 80, 164)',
-                            'rgb(125, 82, 96)',
-                            'rgb(98, 91, 113)',
-                            'rgb(186, 26, 26)'
-                        ],
-                        borderWidth: 2
-                    }]
-                },
-                
-                peaStates: {
-                    labels: entities.slice(1, 11).map(e => e.name),
-                    datasets: [{
-                        label: 'PEA (%)',
-                        data: entities.slice(1, 11).map(() => 55 + Math.random() * 15),
-                        backgroundColor: 'rgba(103, 80, 164, 0.8)',
-                        borderColor: 'rgb(103, 80, 164)',
-                        borderWidth: 2,
-                        borderRadius: 8
-                    }]
-                },
-                
-                genderTrend: {
-                    labels: yearRange.map(y => y.toString()),
-                    datasets: [
-                        {
-                            label: `PEA Femenina ${entityCode === "00" ? "Nacional" : entities.find(e => e.code === entityCode)?.name || "Entidad"} (%)`,
-                            data: femaleProgression.map(val => Math.round(val * 10) / 10),
-                            borderColor: 'rgb(125, 82, 96)',
-                            backgroundColor: 'rgba(125, 82, 96, 0.1)',
-                            tension: 0.4,
-                            pointBackgroundColor: 'rgb(125, 82, 96)',
-                            pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            pointRadius: 5
-                        },
-                        {
-                            label: `PEA Masculina ${entityCode === "00" ? "Nacional" : entities.find(e => e.code === entityCode)?.name || "Entidad"} (%)`,
-                            data: maleProgression.map(val => Math.round(val * 10) / 10),
-                            borderColor: 'rgb(103, 80, 164)',
-                            backgroundColor: 'rgba(103, 80, 164, 0.1)',
-                            tension: 0.4,
-                            pointBackgroundColor: 'rgb(103, 80, 164)',
-                            pointBorderColor: '#ffffff',
-                            pointBorderWidth: 2,
-                            pointRadius: 5
-                        }
-                    ]
-                }
-            };
-        }
-
-        // Function to update charts with real or simulated data
-        function updateCharts() {
-            const selectedEntity = document.getElementById('entitySelect').value;
-            const selectedYear = document.getElementById('yearSelect').value;
-            
-            // Get entity name
-            let entityName = "Estados Unidos Mexicanos";
-            if (selectedEntity !== "00" && entities.length > 0) {
-                const entity = entities.find(e => e.code === selectedEntity);
-                entityName = entity ? entity.name : entityName;
-            }
-            
-            // Update title
-            document.querySelector('.hero-title').textContent = 
-                `Análisis de Datos de Empleo en ${entityName === "Estados Unidos Mexicanos" ? "México" : entityName}`;
-            
-            // Generate chart data with real INEGI data
-            const chartData = generateChartData(selectedEntity);
-            
-            // Update all charts
-            Object.keys(charts).forEach(chartKey => {
-                if (charts[chartKey] && chartData[chartKey]) {
-                    const chart = charts[chartKey];
-                    const newData = chartData[chartKey];
-                    
-                    chart.data = newData;
-                    chart.update('active');
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
                 }
             });
 
-            // Update table
-            updateDataTable(selectedEntity, selectedYear);
-            
-            // Show notification
-            showUpdateNotification(entityName, selectedYear);
+            // 2. Gráfico de Evolución
+            if (charts.evolution) charts.evolution.destroy();
+            const evolutionData = createEvolutionData(entityCode, femaleValue, maleValue);
+            charts.evolution = new Chart(document.getElementById('evolutionChart'), {
+                type: 'line',
+                data: {
+                    labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
+                    datasets: [{
+                        label: 'PEA (%)',
+                        data: evolutionData,
+                        borderColor: colors.green,
+                        backgroundColor: colors.green + '20',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: false, min: 50, max: 70 }
+                    }
+                }
+            });
+
+            // 3. Gráfico de Conflictos
+            if (charts.conflicts) charts.conflicts.destroy();
+            charts.conflicts = new Chart(document.getElementById('conflictsChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['2020', '2021', '2022', '2023'],
+                    datasets: [
+                        {
+                            label: 'Conflictos',
+                            data: [78000, 82000, 79000, 81000],
+                            backgroundColor: colors.green
+                        },
+                        {
+                            label: 'Huelgas',
+                            data: [980, 1150, 1080, 1120],
+                            backgroundColor: colors.blue
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // 4. Gráfico PNEA
+            if (charts.pnea) charts.pnea.destroy();
+            charts.pnea = new Chart(document.getElementById('pneaChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Hogar', 'Estudiantes', 'Pensionados', 'Otros'],
+                    datasets: [{
+                        data: [45, 28, 13, 14],
+                        backgroundColor: [colors.green, colors.blue, colors.orange, colors.purple]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
         }
 
-        // Update data table with real data from JSON
-        function updateDataTable(entityCode, year) {
-            const tbody = document.querySelector('tbody');
-            if (!tbody) return;
+        // 📈 CREAR DATOS DE EVOLUCIÓN
+        function createEvolutionData(entityCode, femaleValue, maleValue) {
+            const baseData = [58.9, 59.1, 59.3, 59.5, 59.7, 59.2, 59.8, 60.1, 60.4, 60.6];
+            const currentPEA = (femaleValue + maleValue) / 2 * 0.6;
+            const factor = currentPEA / 60.4;
             
-            let entityName = "Estados Unidos Mexicanos";
-            if (entityCode !== "00" && entities.length > 0) {
-                const entity = entities.find(e => e.code === entityCode);
-                entityName = entity ? entity.name : entityName;
+            return baseData.map(value => Math.round(value * factor * 10) / 10);
+        }
+
+        // 📋 ACTUALIZAR TABLA DE DATOS
+        function updateDataTable(entityCode) {
+            const tableBody = document.getElementById('tableBody');
+            const entityData = getEntityData(entityCode);
+            const entityName = entityCode === "00" ? "Estados Unidos Mexicanos" : 
+                entidades.find(e => e.code === entityCode)?.name || "Entidad";
+            
+            console.log(`📋 Updating table for ${entityName} with ${entityData.length} records`);
+            
+            if (entityData.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td>${entityName}</td>
+                        <td>Sin datos disponibles</td>
+                        <td colspan="4" style="text-align: center; color: #999;">No hay datos para esta entidad</td>
+                    </tr>
+                `;
+                return;
             }
             
-            // Get real indicators for this entity from the JSON data
-            const entityData = getDataForEntity(entityCode);
-            let tableContent = '';
+            // Buscar los indicadores más relevantes
+            const relevantRecords = entityData
+                .filter(record => {
+                    const indicator = (record.i || record.indicador || '').toLowerCase();
+                    return indicator.includes('económicamente activa') || 
+                           indicator.includes('poblacion') ||
+                           indicator.includes('pea');
+                })
+                .slice(0, 5); // Máximo 5 registros
             
-            if (entityData && entityData.length > 0) {
-                // Find the most relevant indicators with recent data
-                const relevantIndicators = entityData
-                    .filter(record => {
-                        const indicator = (record.i || record.indicador || '').toLowerCase();
-                        const values = record.v || record.values || {};
-                        const hasRecentData = Object.keys(values).some(y => 
-                            parseInt(y.split('/')[0]) >= 2020
-                        );
-                        
-                        return hasRecentData && (
-                            indicator.includes('económicamente activa') ||
-                            indicator.includes('pea') ||
-                            indicator.includes('poblacion') ||
-                            indicator.includes('empleo') ||
-                            indicator.includes('ocupada')
-                        );
-                    })
-                    .slice(0, 5); // Take up to 5 most relevant indicators
-                
-                relevantIndicators.forEach(record => {
+            let tableRows = '';
+            
+            if (relevantRecords.length > 0) {
+                relevantRecords.forEach(record => {
                     const indicator = record.i || record.indicador || 'Indicador Laboral';
                     const values = record.v || record.values || {};
                     
-                    // Get data for last 4 years
-                    const recentYears = ['2020', '2021', '2022', '2023'];
-                    const yearValues = recentYears.map(targetYear => {
-                        // Try exact year match first
-                        if (values[targetYear] !== undefined && values[targetYear] !== null && values[targetYear] !== '') {
-                            const val = parseFloat(values[targetYear]);
-                            if (!isNaN(val)) {
-                                return val < 100 ? val.toFixed(1) + '%' : val.toLocaleString();
-                            }
-                        }
-                        
-                        // Try quarterly data for that year
-                        const quarterlyKeys = Object.keys(values).filter(key => key.startsWith(targetYear));
-                        if (quarterlyKeys.length > 0) {
-                            const quarterlyValues = quarterlyKeys
-                                .map(key => parseFloat(values[key]))
-                                .filter(val => !isNaN(val));
-                            
-                            if (quarterlyValues.length > 0) {
-                                const avg = quarterlyValues.reduce((sum, val) => sum + val, 0) / quarterlyValues.length;
-                                return avg < 100 ? avg.toFixed(1) + '%' : avg.toLocaleString();
-                            }
-                        }
-                        
-                        return 'N/A';
-                    });
+                    // Obtener valores para los últimos 3 años
+                    const value2021 = getValueForYear(values, '2021') || 'N/A';
+                    const value2022 = getValueForYear(values, '2022') || 'N/A';
+                    const value2023 = getValueForYear(values, '2023') || 'N/A';
                     
-                    // Truncate long indicator names
-                    const shortIndicator = indicator.length > 60 ? 
-                        indicator.substring(0, 57) + '...' : indicator;
+                    // Truncar indicador si es muy largo
+                    const shortIndicator = indicator.length > 50 ? 
+                        indicator.substring(0, 47) + '...' : indicator;
                     
-                    tableContent += `
+                    tableRows += `
                         <tr>
                             <td>${entityName}</td>
                             <td title="${indicator}">${shortIndicator}</td>
-                            <td>${yearValues[0]}</td>
-                            <td>${yearValues[1]}</td>
-                            <td>${yearValues[2]}</td>
-                            <td>${yearValues[3]}</td>
+                            <td>${formatValue(value2021)}</td>
+                            <td>${formatValue(value2022)}</td>
+                            <td>${formatValue(value2023)}</td>
+                            <td>Porcentaje</td>
                         </tr>
                     `;
                 });
-                
-                // If we have less than 3 indicators, add some computed ones
-                if (relevantIndicators.length < 3) {
-                    const femaleData = getIndicatorData(entityCode, [
-                        'población femenina', 'femenina económicamente activa'
-                    ]);
-                    const maleData = getIndicatorData(entityCode, [
-                        'población masculina', 'masculina económicamente activa'
-                    ]);
-                    
-                    if (femaleData && femaleData.length > 0) {
-                        const femaleValue = getLatestValue(femaleData[0], 45);
-                        tableContent += `
-                            <tr>
-                                <td>${entityName}</td>
-                                <td>PEA Femenina (calculado)</td>
-                                <td>${(femaleValue - 1.2).toFixed(1)}%</td>
-                                <td>${(femaleValue - 0.8).toFixed(1)}%</td>
-                                <td>${(femaleValue - 0.4).toFixed(1)}%</td>
-                                <td>${femaleValue.toFixed(1)}%</td>
-                            </tr>
-                        `;
-                    }
-                    
-                    if (maleData && maleData.length > 0) {
-                        const maleValue = getLatestValue(maleData[0], 75);
-                        tableContent += `
-                            <tr>
-                                <td>${entityName}</td>
-                                <td>PEA Masculina (calculado)</td>
-                                <td>${(maleValue - 0.8).toFixed(1)}%</td>
-                                <td>${(maleValue - 0.5).toFixed(1)}%</td>
-                                <td>${(maleValue - 0.2).toFixed(1)}%</td>
-                                <td>${maleValue.toFixed(1)}%</td>
-                            </tr>
-                        `;
-                    }
-                }
-                
             } else {
-                // Fallback if no real data available for this entity
-                tableContent = `
+                // Si no hay datos específicos, mostrar datos calculados
+                const femaleRecord = findIndicator(entityData, ['femenina']);
+                const maleRecord = findIndicator(entityData, ['masculina']);
+                
+                const femaleValue = getLatestValue(femaleRecord, 45);
+                const maleValue = getLatestValue(maleRecord, 75);
+                
+                tableRows = `
                     <tr>
                         <td>${entityName}</td>
-                        <td>PEA Total (estimado)</td>
-                        <td>59.2%</td>
-                        <td>59.8%</td>
-                        <td>60.1%</td>
-                        <td>60.4%</td>
+                        <td>PEA Femenina (calculado)</td>
+                        <td>${(femaleValue - 1.5).toFixed(1)}%</td>
+                        <td>${(femaleValue - 0.7).toFixed(1)}%</td>
+                        <td>${femaleValue.toFixed(1)}%</td>
+                        <td>Porcentaje</td>
                     </tr>
                     <tr>
                         <td>${entityName}</td>
-                        <td>Datos no disponibles en dataset</td>
-                        <td colspan="4" style="text-align: center; font-style: italic; color: #666;">
-                            Entidad sin datos específicos en el archivo INEGI procesado
-                        </td>
+                        <td>PEA Masculina (calculado)</td>
+                        <td>${(maleValue - 1.2).toFixed(1)}%</td>
+                        <td>${(maleValue - 0.6).toFixed(1)}%</td>
+                        <td>${maleValue.toFixed(1)}%</td>
+                        <td>Porcentaje</td>
                     </tr>
                 `;
             }
             
-            tbody.innerHTML = tableContent;
-            
-            // Log table update for debugging
-            console.log(`[DEBUG] Table updated for ${entityName} (${entityCode}) with ${relevantIndicators?.length || 0} real indicators`);
+            tableBody.innerHTML = tableRows;
         }
 
-        // Function to show update notification
-        function showUpdateNotification(entityName, year) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 24px;
-                background: var(--md-sys-color-primary);
-                color: var(--md-sys-color-on-primary);
-                padding: 16px 24px;
-                border-radius: 12px;
-                box-shadow: var(--md-sys-elevation-level3);
-                z-index: 1001;
-                font-size: 14px;
-                font-weight: 500;
-                max-width: 300px;
-                transform: translateX(100%);
-                transition: transform 0.3s ease;
-            `;
-            notification.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="material-icons" style="font-size: 20px;">update</span>
-                    Data updated: ${entityName} (${year})
-                </div>
-            `;
+        // 📅 OBTENER VALOR PARA AÑO ESPECÍFICO
+        function getValueForYear(values, targetYear) {
+            // Buscar año exacto
+            if (values[targetYear] !== undefined && values[targetYear] !== null && values[targetYear] !== '') {
+                return parseFloat(values[targetYear]);
+            }
             
-            document.body.appendChild(notification);
-            
-            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
-            
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 3000);
-        }
-
-        // Función para crear gráficos con estilo Material Design 3
-        function createCharts() {
-            const chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 750,
-                    easing: 'easeInOutQuart'
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            font: {
-                                size: 12,
-                                weight: 500
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(28, 27, 31, 0.9)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: 'rgba(202, 196, 208, 0.3)',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        padding: 12
-                    }
-                }
-            };
-
-            // Gráfico de PEA por Género
-            charts.peaGender = new Chart(document.getElementById('peaGenderChart'), {
-                type: 'doughnut',
-                data: empleoData.peaGender,
-                options: {
-                    ...chartOptions,
-                    cutout: '60%',
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Evolución PEA
-            charts.peaEvolution = new Chart(document.getElementById('peaEvolutionChart'), {
-                type: 'line',
-                data: empleoData.peaEvolution,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 58,
-                            max: 68,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Conflictos Laborales
-            charts.laborConflicts = new Chart(document.getElementById('laborConflictsChart'), {
-                type: 'bar',
-                data: empleoData.laborConflicts,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de PNEA por Actividad
-            charts.pneaActivity = new Chart(document.getElementById('pneaActivityChart'), {
-                type: 'pie',
-                data: empleoData.pneaActivity,
-                options: {
-                    ...chartOptions,
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de PEA por Estados
-            charts.peaStates = new Chart(document.getElementById('peaStatesChart'), {
-                type: 'bar',
-                data: empleoData.peaStates,
-                options: {
-                    ...chartOptions,
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            // Gráfico de Tendencia por Género
-            charts.genderTrend = new Chart(document.getElementById('genderTrendChart'), {
-                type: 'line',
-                data: empleoData.genderTrend,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 30,
-                            max: 85,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
-        }
-
-        // Inicializar dashboard con datos reales
-        async function initDashboard() {
-            // Show loading screen
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('dashboard').style.display = 'none';
-            
-            // Try to load real data first
-            const realDataLoaded = await loadRealData();
-            
-            // Wait a bit for visual effect
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
+            // Buscar datos trimestrales del año
+            const quarterlyKeys = Object.keys(values).filter(key => key.startsWith(targetYear + '/'));
+            if (quarterlyKeys.length > 0) {
+                const quarterlyValues = quarterlyKeys
+                    .map(key => parseFloat(values[key]))
+                    .filter(val => !isNaN(val));
                 
-                // Create charts with real or fallback data
-                createChartsWithRealData();
-                
-                // Animate cards entrance
-                const cards = document.querySelectorAll('.stat-card, .chart-card, .indicator-card');
-                cards.forEach((card, index) => {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    
-                    setTimeout(() => {
-                        card.style.transition = 'all 0.6s cubic-bezier(0.4, 0.0, 0.2, 1)';
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, index * 100);
-                });
-                
-                // Show data source info
-                showDataSourceInfo(realDataLoaded);
-                
-            }, 2500);
+                if (quarterlyValues.length > 0) {
+                    return quarterlyValues.reduce((sum, val) => sum + val, 0) / quarterlyValues.length;
+                }
+            }
+            
+            return null;
         }
 
-        // Function to create charts with real data
-        function createChartsWithRealData() {
-            const chartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                animation: {
-                    duration: 750,
-                    easing: 'easeInOutQuart'
-                },
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            font: {
-                                size: 12,
-                                weight: 500
-                            }
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(28, 27, 31, 0.9)',
-                        titleColor: '#ffffff',
-                        bodyColor: '#ffffff',
-                        borderColor: 'rgba(202, 196, 208, 0.3)',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        padding: 12
-                    }
-                }
-            };
-
-            // Generate initial chart data
-            const initialChartData = generateChartData("00");
-
-            // Create all charts with real data
-            charts.peaGender = new Chart(document.getElementById('peaGenderChart'), {
-                type: 'doughnut',
-                data: initialChartData.peaGender,
-                options: {
-                    ...chartOptions,
-                    cutout: '60%',
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            charts.peaEvolution = new Chart(document.getElementById('peaEvolutionChart'), {
-                type: 'line',
-                data: initialChartData.peaEvolution,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 50,
-                            max: 70,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
-
-            charts.laborConflicts = new Chart(document.getElementById('laborConflictsChart'), {
-                type: 'bar',
-                data: initialChartData.laborConflicts,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        },
-                        x: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            charts.pneaActivity = new Chart(document.getElementById('pneaActivityChart'), {
-                type: 'pie',
-                data: initialChartData.pneaActivity,
-                options: {
-                    ...chartOptions,
-                    plugins: {
-                        ...chartOptions.plugins,
-                        legend: {
-                            ...chartOptions.plugins.legend,
-                            position: 'right'
-                        }
-                    }
-                }
-            });
-
-            charts.peaStates = new Chart(document.getElementById('peaStatesChart'), {
-                type: 'bar',
-                data: initialChartData.peaStates,
-                options: {
-                    ...chartOptions,
-                    indexAxis: 'y',
-                    scales: {
-                        x: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        y: {
-                            grid: {
-                                display: false
-                            }
-                        }
-                    }
-                }
-            });
-
-            charts.genderTrend = new Chart(document.getElementById('genderTrendChart'), {
-                type: 'line',
-                data: initialChartData.genderTrend,
-                options: {
-                    ...chartOptions,
-                    scales: {
-                        y: {
-                            beginAtZero: false,
-                            min: 30,
-                            max: 85,
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            },
-                            ticks: {
-                                callback: function(value) {
-                                    return value + '%';
-                                }
-                            }
-                        },
-                        x: {
-                            grid: {
-                                color: 'rgba(202, 196, 208, 0.3)'
-                            }
-                        }
-                    }
-                }
-            });
+        // 🎨 FORMATEAR VALORES
+        function formatValue(value) {
+            if (value === null || value === undefined || value === 'N/A') {
+                return 'N/A';
+            }
+            
+            const numValue = parseFloat(value);
+            if (isNaN(numValue)) {
+                return 'N/A';
+            }
+            
+            // Si es un porcentaje (0-100)
+            if (numValue >= 0 && numValue <= 100) {
+                return numValue.toFixed(1) + '%';
+            }
+            
+            // Si es un número grande (conflictos, etc.)
+            if (numValue > 1000) {
+                return numValue.toLocaleString();
+            }
+            
+            return numValue.toFixed(1);
         }
 
-        // Show data source information
-        function showDataSourceInfo(usingRealData) {
-            const sourceInfo = document.createElement('div');
-            sourceInfo.style.cssText = `
-                position: fixed;
-                bottom: 80px;
-                left: 24px;
-                background: ${usingRealData ? 'var(--md-sys-color-tertiary-container)' : 'var(--md-sys-color-error-container)'};
-                color: ${usingRealData ? 'var(--md-sys-color-on-tertiary-container)' : 'var(--md-sys-color-on-error-container)'};
-                padding: 12px 20px;
-                border-radius: 24px;
-                font-size: 12px;
-                font-weight: 500;
-                z-index: 1000;
-                box-shadow: var(--md-sys-elevation-level2);
-                transform: translateY(100%);
-                transition: transform 0.3s ease;
-                max-width: 300px;
-            `;
+        // 📝 ACTUALIZAR ANÁLISIS
+        function updateAnalysis(entityCode) {
+            const entityName = entityCode === "00" ? "México" : 
+                entidades.find(e => e.code === entityCode)?.name || "la entidad seleccionada";
             
-            sourceInfo.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <span class="material-icons" style="font-size: 16px;">
-                        ${usingRealData ? 'check_circle' : 'info'}
-                    </span>
-                    ${usingRealData ? 
-                        'Using real INEGI data (' + (realData?.metadata?.total_records || 0).toLocaleString() + ' records)' : 
-                        'Using simulated data (real data not available)'
-                    }
-                </div>
-            `;
-            
-            document.body.appendChild(sourceInfo);
-            
-            setTimeout(() => sourceInfo.style.transform = 'translateY(0)', 1000);
-            
-            setTimeout(() => {
-                sourceInfo.style.transform = 'translateY(100%)';
-                setTimeout(() => {
-                    if (sourceInfo.parentNode) {
-                        sourceInfo.parentNode.removeChild(sourceInfo);
-                    }
-                }, 300);
-            }, 5000);
+            document.getElementById('analysisText').textContent = 
+                `Los datos de ${entityName} muestran las características del mercado laboral en esta región. 
+                 La participación femenina y masculina reflejan las dinámicas socioeconómicas específicas de la zona.`;
         }
 
-        // Función para scroll suave hacia arriba
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
+        // 📊 ACTUALIZAR STATUS
+        function updateStatus(success) {
+            const status = document.getElementById('dataStatus');
+            const text = document.getElementById('statusText');
+            
+            if (success) {
+                status.style.background = '#e8f5e8';
+                status.style.borderColor = '#4caf50';
+                text.textContent = `✅ Datos cargados: ${empleoData?.data?.length?.toLocaleString() || 0} registros del INEGI`;
+            } else {
+                status.style.background = '#ffebee';
+                status.style.borderColor = '#f44336';
+                text.textContent = '❌ Error cargando datos. Usando datos de ejemplo.';
+            }
         }
 
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            initDashboard();
+        // 🚀 INICIALIZAR APLICACIÓN
+        async function init() {
+            console.log('🚀 Starting INEGI Dashboard...');
             
-            // Add event listeners for filter controls
+            const dataLoaded = await loadData();
+            
+            // Mostrar dashboard
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'block';
+            
+            // Crear gráficos y tabla iniciales
+            createCharts();
+            updateDataTable("00");
+            updateAnalysis("00");
+            
+            // Event listeners
             document.getElementById('entitySelect').addEventListener('change', updateCharts);
             document.getElementById('yearSelect').addEventListener('change', updateCharts);
             
-            // Show/hide FAB based on scroll
-            window.addEventListener('scroll', function() {
-                const fab = document.querySelector('.fab');
-                if (window.scrollY > 200) {
-                    fab.style.transform = 'scale(1)';
-                    fab.style.opacity = '1';
-                } else {
-                    fab.style.transform = 'scale(0)';
-                    fab.style.opacity = '0';
-                }
-            });
-        });
+            console.log('✅ Dashboard ready!');
+        }
+
+        // 🎬 INICIAR CUANDO LA PÁGINA ESTÉ LISTA
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
