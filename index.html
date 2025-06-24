@@ -3,866 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard INEGI - Empleo México</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Dashboard Final de Empleo - INEGI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --sidebar-bg: #111827; --sidebar-text: #9CA3AF; --sidebar-text-hover: #FFFFFF;
+            --sidebar-active-bg: #4F46E5; --main-bg: #F9FAFB; --card-bg: #FFFFFF;
+            --text-primary: #1F2937; --text-secondary: #6B7280; --border-color: #E5E7EB;
+            --primary-accent: #4F46E5; --font-family: 'Inter', sans-serif;
         }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #e8f5e8 0%, #f1f8e9 100%);
-            min-height: 100vh;
-            color: #1b5e20;
+            font-family: var(--font-family); background-color: var(--main-bg);
+            color: var(--text-primary); display: flex;
         }
+        
+        .sidebar {
+            width: 260px; background-color: var(--sidebar-bg); color: var(--sidebar-text);
+            padding: 24px; height: 100vh; position: fixed; display: flex; flex-direction: column;
+            justify-content: space-between; /* <-- AÑADIDO para empujar el footer hacia abajo */
+        }
+        .sidebar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+        .sidebar-header .logo-icon { font-size: 32px; color: var(--primary-accent); }
+        .sidebar-header h1 { font-size: 20px; font-weight: 700; color: #FFFFFF; }
+        .sidebar-nav ul { list-style: none; }
+        .sidebar-nav li a {
+            display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+            border-radius: 8px; text-decoration: none; color: var(--sidebar-text);
+            font-weight: 500; transition: background-color 0.2s, color 0.2s;
+        }
+        .sidebar-nav li a:hover { background-color: #374151; color: var(--sidebar-text-hover); }
+        .sidebar-nav li a.active { background-color: var(--sidebar-active-bg); color: #FFFFFF; font-weight: 600; }
+        
+        /* --- NUEVO: Estilos para el footer del sidebar --- */
+        .sidebar-footer {
+            font-size: 12px; border-top: 1px solid #374151; padding-top: 20px;
+        }
+        .footer-stat { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+        .footer-stat .material-symbols-outlined { font-size: 16px; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+        .main-content { margin-left: 260px; width: calc(100% - 260px); padding: 24px; }
+        .main-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .main-header h2 { font-size: 24px; font-weight: 700; }
+        
+        .kpi-grid, .charts-grid, .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 24px; }
+        
+        .kpi-card, .chart-card, .single-value-card { background-color: var(--card-bg); border-radius: 12px; padding: 24px; border: 1px solid var(--border-color); }
+        .kpi-card .icon, .single-value-card .icon { font-size: 32px; color: var(--primary-accent); margin-bottom: 16px; }
+        .kpi-card .value, .single-value-card .value { font-size: 28px; font-weight: 700; }
+        .kpi-card .label, .single-value-card .label { font-size: 14px; color: var(--text-secondary); }
 
-        .header {
-            background: white;
-            border-radius: 16px;
-            padding: 32px;
-            margin-bottom: 24px;
-            box-shadow: 0 4px 20px rgba(46, 125, 50, 0.1);
-            border-left: 6px solid #2e7d32;
+        .controls { background-color: var(--card-bg); border-radius: 12px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border-color); }
+        select {
+            width: 100%; font-size: 16px; font-family: var(--font-family); padding: 12px;
+            border: 1px solid var(--border-color); border-radius: 8px; background-color: #FFFFFF; cursor: pointer;
         }
-
-        .header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            color: #1b5e20;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header p {
-            color: #4caf50;
-            font-weight: 500;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
-            border-top: 4px solid #4caf50;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 600;
-            color: #2e7d32;
-            margin-bottom: 4px;
-        }
-
-        .stat-label {
-            color: #666;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        .controls {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
-            display: flex;
-            gap: 20px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .control-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .control-group label {
-            font-weight: 500;
-            color: #2e7d32;
-            font-size: 14px;
-        }
-
-        .control-group select {
-            padding: 10px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: white;
-            color: #333;
-            font-size: 14px;
-            min-width: 200px;
-            cursor: pointer;
-        }
-
-        .control-group select:focus {
-            outline: none;
-            border-color: #4caf50;
-            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
-        }
-
-        .charts {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 24px;
-            margin-bottom: 24px;
-        }
-
-        .chart-card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
-        }
-
-        .chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1b5e20;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 300px;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 60px 20px;
-            color: #4caf50;
-        }
-
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #e8f5e8;
-            border-top: 4px solid #4caf50;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 16px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .data-status {
-            background: #e8f5e8;
-            border: 1px solid #4caf50;
-            border-radius: 8px;
-            padding: 12px 16px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            color: #2e7d32;
-        }
-
-        .analysis {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 12px rgba(46, 125, 50, 0.1);
-        }
-
-        .analysis h3 {
-            color: #1b5e20;
-            margin-bottom: 16px;
-            font-size: 20px;
-        }
-
-        .analysis p {
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
-
-        .table-container {
-            overflow-x: auto;
-            margin-top: 16px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-        }
-
-        #dataTable {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            font-size: 14px;
-        }
-
-        #dataTable th {
-            background: #2e7d32;
-            color: white;
-            padding: 12px 16px;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #1b5e20;
-        }
-
-        #dataTable td {
-            padding: 12px 16px;
-            border-bottom: 1px solid #f0f0f0;
-            color: #333;
-        }
-
-        #dataTable tr:nth-child(even) {
-            background: #f8f9fa;
-        }
-
-        #dataTable tr:hover {
-            background: #e8f5e8;
-        }
-
-        #dataTable td:last-child {
-            font-weight: 500;
-            color: #2e7d32;
-        }
-
-        @media (max-width: 768px) {
-            .charts {
-                grid-template-columns: 1fr;
-            }
-            .controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .control-group select {
-                min-width: auto;
-                width: 100%;
-            }
-        }
+        
+        .section-title { font-size: 20px; font-weight: 600; margin-top: 40px; margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;}
+        
+        .chart-title { font-size: 14px; font-weight: 600; margin-bottom: 16px; height: 40px; }
+        .chart-wrapper { position: relative; height: 220px; }
+        .placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; }
+        .placeholder .material-symbols-outlined { font-size: 48px; color: #D1D5DB; }
+        .placeholder p { color: var(--text-secondary); opacity: 0.7; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>
-                <span class="material-icons">analytics</span>
-                Dashboard de Empleo y Ocupación - México
-            </h1>
-            <p>Análisis de datos oficiales del INEGI (1988-2025)</p>
-        </div>
 
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
-            <p>Cargando datos del INEGI...</p>
-        </div>
-
-        <div id="dashboard" style="display: none;">
-            <div class="data-status" id="dataStatus">
-                <span class="material-icons">info</span>
-                <span id="statusText">Cargando información...</span>
-            </div>
-
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-number" id="totalRecords">0</div>
-                    <div class="stat-label">Registros Procesados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalEntities">33</div>
-                    <div class="stat-label">Entidades Federativas</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="totalIndicators">0</div>
-                    <div class="stat-label">Indicadores</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number" id="dataYears">37</div>
-                    <div class="stat-label">Años de Datos</div>
-                </div>
-            </div>
-
-            <div class="controls">
-                <div class="control-group">
-                    <label for="entitySelect">Entidad Federativa:</label>
-                    <select id="entitySelect">
-                        <option value="00">Estados Unidos Mexicanos</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label for="yearSelect">Año de Referencia:</label>
-                    <select id="yearSelect">
-                        <option value="2023">2023</option>
-                        <option value="2022">2022</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="charts">
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span class="material-icons">donut_small</span>
-                        Participación Laboral por Género
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="genderChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span class="material-icons">trending_up</span>
-                        Evolución de la PEA
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="evolutionChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span class="material-icons">bar_chart</span>
-                        Conflictos Laborales
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="conflictsChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="chart-card">
-                    <div class="chart-title">
-                        <span class="material-icons">pie_chart</span>
-                        Población No Económicamente Activa
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="pneaChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="analysis">
-                <h3>📊 Muestra de Datos Procesados</h3>
-                <div class="table-container">
-                    <table id="dataTable">
-                        <thead>
-                            <tr>
-                                <th>Entidad</th>
-                                <th>Indicador</th>
-                                <th>2021</th>
-                                <th>2022</th>
-                                <th>2023</th>
-                                <th>Unidad</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <tr>
-                                <td>Estados Unidos Mexicanos</td>
-                                <td>PEA Total</td>
-                                <td>59.8%</td>
-                                <td>60.1%</td>
-                                <td>60.4%</td>
-                                <td>Porcentaje</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="analysis">
-                <h3>📝 Análisis de Resultados</h3>
-                <p id="analysisText">
-                    Los datos muestran la evolución del mercado laboral mexicano a lo largo de las últimas décadas. 
-                    La participación laboral femenina ha experimentado un crecimiento sostenido, mientras que 
-                    la participación masculina se mantiene relativamente estable.
-                </p>
+    <nav class="sidebar">
+        <div>
+            <div class="sidebar-header"><span class="logo-icon material-symbols-outlined">analytics</span><h1>Análisis de Datos</h1></div>
+            <div class="sidebar-nav">
+                <ul>
+                    <li><a href="#" class="active"><span class="material-symbols-outlined">dashboard</span>Dashboard</a></li>
+                </ul>
             </div>
         </div>
-    </div>
+        
+        <div class="sidebar-footer">
+            <div class="footer-stat"><span class="material-symbols-outlined">database</span><span id="footer-records">...</span></div>
+            <div class="footer-stat"><span class="material-symbols-outlined">update</span><span id="footer-processed-time">...</span></div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="main-header">
+            <h2 id="dashboard-title">Dashboard General</h2>
+        </header>
+        
+        <section class="kpi-grid">
+             <div class="kpi-card">
+                <span class="icon material-symbols-outlined" style="color: #3B82F6;">description</span>
+                <div class="value" id="highlight-records">...</div>
+                <div class="label">Registros de Empleo</div>
+            </div>
+            <div class="kpi-card">
+                <span class="icon material-symbols-outlined" style="color: #10B981;">date_range</span>
+                <div class="value" id="highlight-period">...</div>
+                <div class="label">Período de Datos</div>
+            </div>
+            <div class="kpi-card">
+                <span class="icon material-symbols-outlined" style="color: #F59E0B;">public</span>
+                <div class="value" id="highlight-entities">...</div>
+                <div class="label">Entidades Federativas</div>
+            </div>
+            <div class="kpi-card">
+                <span class="icon material-symbols-outlined" style="color: #EF4444;">insights</span>
+                <div class="value" id="highlight-indicators">...</div>
+                <div class="label">Indicadores Únicos</div>
+            </div>
+        </section>
+
+        <section class="controls">
+            <label for="entidad-select" style="font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">Selecciona una Entidad Federativa para el Análisis Detallado</label>
+            <select id="entidad-select" aria-label="Selecciona una Entidad"></select>
+        </section>
+
+        <section>
+            <h3 class="section-title">Indicadores Graficables (Tendencias)</h3>
+            <div id="charts-grid" class="charts-grid"></div>
+        </section>
+
+        <section>
+            <h3 class="section-title">Indicadores con Dato Único</h3>
+            <div id="cards-grid" class="cards-grid"></div>
+        </section>
+        
+    </main>
 
     <script>
-        // 🎯 VARIABLES GLOBALES SIMPLES
-        let empleoData = null;
-        let entidades = [];
-        let indicadores = [];
-        let charts = {};
+        let allData = {};
+        let activeCharts = [];
 
-        // 🎨 COLORES VERDES SIMPLES
-        const colors = {
-            green: '#2e7d32',
-            lightGreen: '#4caf50',
-            darkGreen: '#1b5e20',
-            blue: '#1976d2',
-            orange: '#ff8f00',
-            purple: '#7b1fa2',
-            pink: '#c2185b'
-        };
+        const entidadSelect = document.getElementById('entidad-select');
+        const chartsGrid = document.getElementById('charts-grid');
+        const cardsGrid = document.getElementById('cards-grid');
 
-        // 📊 CONFIGURACIÓN DE CHART.JS
-        Chart.defaults.font.family = 'Inter, sans-serif';
-        Chart.defaults.color = '#333';
+        const DISPLAY_INDICATORS = [
+            "Personal ocupado total. Universo total",
+            "Personal ocupado total. Sector privado y paraestatal",
+            "Tasa de desocupación. Población desocupada como porcentaje de la PEA",
+            "Conflictos de trabajo",
+            "Conflictos de trabajo solucionados",
+            "Huelgas estalladas",
+            "Huelgas solucionadas",
+            "Personal ocupado total. Sector 31-33. Industrias manufactureras",
+            "Personal ocupado total. Gran sector 43-46. Comercio",
+            "Personal ocupado que inició operaciones en el año censal. Universo total"
+        ];
+        
+        async function loadAllData() {
+            const [empleoRes, entidadesRes, indicadoresRes] = await Promise.all([
+                fetch('./data/empleo_compressed.json'),
+                fetch('./data/entidades.json'),
+                fetch('./data/indicadores.json')
+            ]);
+            if (!empleoRes.ok || !entidadesRes.ok || !indicadoresRes.ok) {
+                throw new Error('Fallo al cargar uno o más archivos JSON.');
+            }
+            return { 
+                empleo: (await empleoRes.json()).data, 
+                entidades: await entidadesRes.json(), 
+                indicadores: await indicadoresRes.json() 
+            };
+        }
 
-        // 🔄 FUNCIÓN PRINCIPAL: CARGAR DATOS
-        async function loadData() {
-            try {
-                console.log('🔄 Loading INEGI data...');
+        function populateSelect(entidades) {
+            entidadSelect.innerHTML = '';
+            entidades.sort((a, b) => a.name.localeCompare(b.name)).forEach(entidad => {
+                const option = document.createElement('option');
+                option.value = entidad.code;
+                option.textContent = entidad.name;
+                entidadSelect.appendChild(option);
+            });
+        }
+        
+        function destroyActiveCharts() {
+            activeCharts.forEach(c => c.destroy());
+            activeCharts = [];
+        }
+
+        function updateDashboard(entityCode) {
+            destroyActiveCharts();
+            chartsGrid.innerHTML = '';
+            cardsGrid.innerHTML = '';
+            
+            const entityName = entidadSelect.selectedOptions[0].textContent;
+            document.getElementById('dashboard-title').textContent = `Análisis de ${entityName}`;
+            
+            const chartColors = ['#4F46E5', '#D946EF', '#10B981', '#F59E0B', '#3B82F6', '#EC4899', '#8B5CF6', '#14B8A6', '#EF4444', '#6B7280'];
+
+            DISPLAY_INDICATORS.forEach((indicatorName, index) => {
+                const indicator = allData.indicadores.find(i => i.name === indicatorName);
+                if (!indicator) {
+                    console.warn(`Indicador no encontrado: ${indicatorName}`);
+                    return;
+                }
+
+                const record = allData.empleo.find(d => d.ii === indicator.id && d.ce === entityCode);
                 
-                // Cargar datos principales
-                const response = await fetch('./data/empleo_compressed.json');
-                if (!response.ok) throw new Error('No se pudieron cargar los datos');
-                
-                empleoData = await response.json();
-                console.log(`✅ Loaded ${empleoData.data?.length || 0} records`);
-
-                // Cargar entidades
-                try {
-                    const entitiesResponse = await fetch('./data/entidades.json');
-                    if (entitiesResponse.ok) {
-                        entidades = await entitiesResponse.json();
-                    }
-                } catch (e) {
-                    console.log('ℹ️ Using entities from main data');
-                    extractEntities();
+                let cleanedData = [];
+                if (record && record.v) {
+                    cleanedData = Object.entries(record.v)
+                        .filter(([, value]) => value !== null && value !== undefined && value !== '' && !isNaN(Number(value)))
+                        .map(([year, value]) => ({ year: parseInt(year), value: Number(value) }))
+                        .sort((a, b) => a.year - b.year);
                 }
 
-                // Cargar indicadores
-                try {
-                    const indicatorsResponse = await fetch('./data/indicadores.json');
-                    if (indicatorsResponse.ok) {
-                        indicadores = await indicatorsResponse.json();
-                    }
-                } catch (e) {
-                    console.log('ℹ️ Using indicators from main data');
-                    extractIndicators();
-                }
-
-                updateStats();
-                populateSelectors();
-                updateStatus(true);
-                return true;
-
-            } catch (error) {
-                console.error('❌ Error loading data:', error);
-                updateStatus(false);
-                return false;
-            }
-        }
-
-        // 📈 EXTRAER ENTIDADES DE LOS DATOS
-        function extractEntities() {
-            const entitiesSet = new Set();
-            if (empleoData?.data) {
-                empleoData.data.forEach(record => {
-                    const code = record.ce || record.cve_entidad;
-                    const name = record.de || record.desc_entidad;
-                    if (code && name) {
-                        entitiesSet.add(JSON.stringify({ code, name }));
-                    }
-                });
-            }
-            entidades = Array.from(entitiesSet).map(item => JSON.parse(item));
-        }
-
-        // 📋 EXTRAER INDICADORES DE LOS DATOS
-        function extractIndicators() {
-            const indicatorsSet = new Set();
-            if (empleoData?.data) {
-                empleoData.data.forEach(record => {
-                    const id = record.ii || record.id_indicador;
-                    const name = record.i || record.indicador;
-                    if (id && name) {
-                        indicatorsSet.add(JSON.stringify({ id, name }));
-                    }
-                });
-            }
-            indicadores = Array.from(indicatorsSet).map(item => JSON.parse(item));
-        }
-
-        // 📊 ACTUALIZAR ESTADÍSTICAS
-        function updateStats() {
-            document.getElementById('totalRecords').textContent = 
-                empleoData?.data?.length?.toLocaleString() || '0';
-            document.getElementById('totalEntities').textContent = entidades.length;
-            document.getElementById('totalIndicators').textContent = indicadores.length;
-        }
-
-        // 🎛️ LLENAR SELECTORES
-        function populateSelectors() {
-            const entitySelect = document.getElementById('entitySelect');
-            
-            // Limpiar y agregar entidades
-            entitySelect.innerHTML = '<option value="00">Estados Unidos Mexicanos</option>';
-            
-            entidades
-                .filter(e => e.code !== "00")
-                .sort((a, b) => a.name.localeCompare(b.name))
-                .forEach(entity => {
-                    const option = document.createElement('option');
-                    option.value = entity.code;
-                    option.textContent = entity.name;
-                    entitySelect.appendChild(option);
-                });
-        }
-
-        // 📊 OBTENER DATOS POR ENTIDAD
-        function getEntityData(entityCode) {
-            if (!empleoData?.data) return [];
-            
-            return empleoData.data.filter(record => {
-                const code = record.ce || record.cve_entidad;
-                return code === entityCode;
-            });
-        }
-
-        // 🔍 BUSCAR INDICADOR ESPECÍFICO
-        function findIndicator(entityData, patterns) {
-            return entityData.find(record => {
-                const indicator = (record.i || record.indicador || '').toLowerCase();
-                return patterns.some(pattern => indicator.includes(pattern.toLowerCase()));
-            });
-        }
-
-        // 📈 OBTENER VALOR MÁS RECIENTE
-        function getLatestValue(record, defaultValue = 0) {
-            if (!record) return defaultValue;
-            
-            const values = record.v || record.values || {};
-            const years = Object.keys(values)
-                .filter(year => !isNaN(parseInt(year.split('/')[0])))
-                .sort((a, b) => parseInt(b.split('/')[0]) - parseInt(a.split('/')[0]));
-            
-            for (let year of years) {
-                const value = parseFloat(values[year]);
-                if (!isNaN(value) && value >= 0 && value <= 100) {
-                    return value;
-                }
-            }
-            return defaultValue;
-        }
-
-        // 🎨 CREAR GRÁFICOS
-        function createCharts(entityCode = "00") {
-            const entityData = getEntityData(entityCode);
-            console.log(`📊 Creating charts for entity ${entityCode} with ${entityData.length} records`);
-
-            // Buscar indicadores específicos
-            const femaleRecord = findIndicator(entityData, ['femenina', 'mujeres']);
-            const maleRecord = findIndicator(entityData, ['masculina', 'hombres']);
-            const conflictsRecord = findIndicator(entityData, ['conflictos']);
-            const strikesRecord = findIndicator(entityData, ['huelgas']);
-
-            // Obtener valores
-            const femaleValue = getLatestValue(femaleRecord, 45);
-            const maleValue = getLatestValue(maleRecord, 75);
-
-            console.log(`👩 Female PEA: ${femaleValue}%`);
-            console.log(`👨 Male PEA: ${maleValue}%`);
-
-            // 1. Gráfico de Género
-            if (charts.gender) charts.gender.destroy();
-            charts.gender = new Chart(document.getElementById('genderChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['PEA Femenina', 'PEA Masculina'],
-                    datasets: [{
-                        data: [femaleValue, maleValue],
-                        backgroundColor: [colors.pink, colors.green],
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
+                if (cleanedData.length >= 2) {
+                    createChartCard(indicatorName, cleanedData, chartColors[index % chartColors.length]);
+                } else if (cleanedData.length === 1) {
+                    createSingleValueCard(indicatorName, cleanedData[0]);
                 }
             });
 
-            // 2. Gráfico de Evolución
-            if (charts.evolution) charts.evolution.destroy();
-            const evolutionData = createEvolutionData(entityCode, femaleValue, maleValue);
-            charts.evolution = new Chart(document.getElementById('evolutionChart'), {
+            if (chartsGrid.innerHTML === '') {
+                chartsGrid.innerHTML = `<div class="placeholder" style="grid-column: 1 / -1;"><span class="material-symbols-outlined">signal_cellular_nodata</span><p>No hay indicadores con suficientes datos para graficar en esta entidad.</p></div>`;
+            }
+             if (cardsGrid.innerHTML === '') {
+                cardsGrid.innerHTML = `<div class="placeholder" style="grid-column: 1 / -1;"><span class="material-symbols-outlined">fact_check</span><p>No hay indicadores con datos de punto único en esta entidad.</p></div>`;
+            }
+        }
+
+        function createChartCard(indicatorName, data, color) {
+            const card = document.createElement('div');
+            card.className = 'chart-card';
+            
+            const title = document.createElement('div');
+            title.className = 'chart-title';
+            title.textContent = indicatorName;
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chart-wrapper';
+            const canvas = document.createElement('canvas');
+            wrapper.appendChild(canvas);
+
+            card.appendChild(title);
+            card.appendChild(wrapper);
+            chartsGrid.appendChild(card);
+
+            const labels = data.map(d => d.year);
+            const values = data.map(d => d.value);
+
+            activeCharts.push(new Chart(canvas, {
                 type: 'line',
-                data: {
-                    labels: ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'],
-                    datasets: [{
-                        label: 'PEA (%)',
-                        data: evolutionData,
-                        borderColor: colors.green,
-                        backgroundColor: colors.green + '20',
-                        tension: 0.4,
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: { beginAtZero: false, min: 50, max: 70 }
-                    }
+                data: { labels, datasets: [{ 
+                    data: values, borderColor: color, borderWidth: 2.5, 
+                    fill: true, backgroundColor: `${color}20`,
+                    tension: 0.4, pointRadius: 2, pointBackgroundColor: color
+                }]},
+                options: { 
+                    responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+                    scales: { y: { ticks: { font: { size: 10 } } }, x: { ticks: { font: { size: 10 } } } }
+                }
+            }));
+        }
+
+        function createSingleValueCard(indicatorName, data) {
+            const card = document.createElement('div');
+            card.className = 'single-value-card';
+            card.innerHTML = `
+                <span class="icon material-symbols-outlined">pin</span>
+                <div class="value">${data.value.toLocaleString()}</div>
+                <div class="label">${indicatorName} (${data.year})</div>
+            `;
+            cardsGrid.appendChild(card);
+        }
+        
+        // ========== NUEVA FUNCIÓN PARA LLENAR LAS ESTADÍSTICAS GLOBALES ==========
+        function populateGlobalStats() {
+            // Llenar las tarjetas de datos relevantes
+            document.getElementById('highlight-records').textContent = allData.empleo.length.toLocaleString();
+            document.getElementById('highlight-entities').textContent = allData.entidades.length.toLocaleString();
+            document.getElementById('highlight-indicators').textContent = allData.indicadores.length.toLocaleString();
+            
+            // Calcular el rango de años
+            const allYears = new Set();
+            allData.empleo.forEach(record => {
+                if (record.v) {
+                    Object.keys(record.v).forEach(year => allYears.add(parseInt(year)));
                 }
             });
+            const minYear = Math.min(...allYears);
+            const maxYear = Math.max(...allYears);
+            document.getElementById('highlight-period').textContent = `${minYear} - ${maxYear}`;
 
-            // 3. Gráfico de Conflictos
-            if (charts.conflicts) charts.conflicts.destroy();
-            charts.conflicts = new Chart(document.getElementById('conflictsChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['2020', '2021', '2022', '2023'],
-                    datasets: [
-                        {
-                            label: 'Conflictos',
-                            data: [78000, 82000, 79000, 81000],
-                            backgroundColor: colors.green
-                        },
-                        {
-                            label: 'Huelgas',
-                            data: [980, 1150, 1080, 1120],
-                            backgroundColor: colors.blue
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true } }
-                }
-            });
-
-            // 4. Gráfico PNEA
-            if (charts.pnea) charts.pnea.destroy();
-            charts.pnea = new Chart(document.getElementById('pneaChart'), {
-                type: 'pie',
-                data: {
-                    labels: ['Hogar', 'Estudiantes', 'Pensionados', 'Otros'],
-                    datasets: [{
-                        data: [45, 28, 13, 14],
-                        backgroundColor: [colors.green, colors.blue, colors.orange, colors.purple]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom' }
-                    }
-                }
-            });
+            // Llenar el footer
+            document.getElementById('footer-records').textContent = `${allData.empleo.length.toLocaleString()} registros procesados`;
+            const now = new Date();
+            document.getElementById('footer-processed-time').textContent = `Datos actualizados: ${now.toLocaleDateString()}`;
         }
 
-        // 📈 CREAR DATOS DE EVOLUCIÓN
-        function createEvolutionData(entityCode, femaleValue, maleValue) {
-            const baseData = [58.9, 59.1, 59.3, 59.5, 59.7, 59.2, 59.8, 60.1, 60.4, 60.6];
-            const currentPEA = (femaleValue + maleValue) / 2 * 0.6;
-            const factor = currentPEA / 60.4;
-            
-            return baseData.map(value => Math.round(value * factor * 10) / 10);
-        }
 
-        // 📋 ACTUALIZAR TABLA DE DATOS
-        function updateDataTable(entityCode) {
-            const tableBody = document.getElementById('tableBody');
-            const entityData = getEntityData(entityCode);
-            const entityName = entityCode === "00" ? "Estados Unidos Mexicanos" : 
-                entidades.find(e => e.code === entityCode)?.name || "Entidad";
-            
-            console.log(`📋 Updating table for ${entityName} with ${entityData.length} records`);
-            
-            if (entityData.length === 0) {
-                tableBody.innerHTML = `
-                    <tr>
-                        <td>${entityName}</td>
-                        <td>Sin datos disponibles</td>
-                        <td colspan="4" style="text-align: center; color: #999;">No hay datos para esta entidad</td>
-                    </tr>
-                `;
-                return;
-            }
-            
-            // Buscar los indicadores más relevantes
-            const relevantRecords = entityData
-                .filter(record => {
-                    const indicator = (record.i || record.indicador || '').toLowerCase();
-                    return indicator.includes('económicamente activa') || 
-                           indicator.includes('poblacion') ||
-                           indicator.includes('pea');
-                })
-                .slice(0, 5); // Máximo 5 registros
-            
-            let tableRows = '';
-            
-            if (relevantRecords.length > 0) {
-                relevantRecords.forEach(record => {
-                    const indicator = record.i || record.indicador || 'Indicador Laboral';
-                    const values = record.v || record.values || {};
-                    
-                    // Obtener valores para los últimos 3 años
-                    const value2021 = getValueForYear(values, '2021') || 'N/A';
-                    const value2022 = getValueForYear(values, '2022') || 'N/A';
-                    const value2023 = getValueForYear(values, '2023') || 'N/A';
-                    
-                    // Truncar indicador si es muy largo
-                    const shortIndicator = indicator.length > 50 ? 
-                        indicator.substring(0, 47) + '...' : indicator;
-                    
-                    tableRows += `
-                        <tr>
-                            <td>${entityName}</td>
-                            <td title="${indicator}">${shortIndicator}</td>
-                            <td>${formatValue(value2021)}</td>
-                            <td>${formatValue(value2022)}</td>
-                            <td>${formatValue(value2023)}</td>
-                            <td>Porcentaje</td>
-                        </tr>
-                    `;
-                });
-            } else {
-                // Si no hay datos específicos, mostrar datos calculados
-                const femaleRecord = findIndicator(entityData, ['femenina']);
-                const maleRecord = findIndicator(entityData, ['masculina']);
+        entidadSelect.addEventListener('change', (e) => {
+            updateDashboard(e.target.value);
+        });
+        
+        async function initializeApp() {
+            try {
+                allData = await loadAllData();
+                populateSelect(allData.entidades);
                 
-                const femaleValue = getLatestValue(femaleRecord, 45);
-                const maleValue = getLatestValue(maleRecord, 75);
-                
-                tableRows = `
-                    <tr>
-                        <td>${entityName}</td>
-                        <td>PEA Femenina (calculado)</td>
-                        <td>${(femaleValue - 1.5).toFixed(1)}%</td>
-                        <td>${(femaleValue - 0.7).toFixed(1)}%</td>
-                        <td>${femaleValue.toFixed(1)}%</td>
-                        <td>Porcentaje</td>
-                    </tr>
-                    <tr>
-                        <td>${entityName}</td>
-                        <td>PEA Masculina (calculado)</td>
-                        <td>${(maleValue - 1.2).toFixed(1)}%</td>
-                        <td>${(maleValue - 0.6).toFixed(1)}%</td>
-                        <td>${maleValue.toFixed(1)}%</td>
-                        <td>Porcentaje</td>
-                    </tr>
-                `;
-            }
-            
-            tableBody.innerHTML = tableRows;
-        }
+                // --- LLAMADA A LA NUEVA FUNCIÓN DE ESTADÍSTICAS ---
+                populateGlobalStats(); 
 
-        // 📅 OBTENER VALOR PARA AÑO ESPECÍFICO
-        function getValueForYear(values, targetYear) {
-            // Buscar año exacto
-            if (values[targetYear] !== undefined && values[targetYear] !== null && values[targetYear] !== '') {
-                return parseFloat(values[targetYear]);
-            }
-            
-            // Buscar datos trimestrales del año
-            const quarterlyKeys = Object.keys(values).filter(key => key.startsWith(targetYear + '/'));
-            if (quarterlyKeys.length > 0) {
-                const quarterlyValues = quarterlyKeys
-                    .map(key => parseFloat(values[key]))
-                    .filter(val => !isNaN(val));
-                
-                if (quarterlyValues.length > 0) {
-                    return quarterlyValues.reduce((sum, val) => sum + val, 0) / quarterlyValues.length;
-                }
-            }
-            
-            return null;
-        }
-
-        // 🎨 FORMATEAR VALORES
-        function formatValue(value) {
-            if (value === null || value === undefined || value === 'N/A') {
-                return 'N/A';
-            }
-            
-            const numValue = parseFloat(value);
-            if (isNaN(numValue)) {
-                return 'N/A';
-            }
-            
-            // Si es un porcentaje (0-100)
-            if (numValue >= 0 && numValue <= 100) {
-                return numValue.toFixed(1) + '%';
-            }
-            
-            // Si es un número grande (conflictos, etc.)
-            if (numValue > 1000) {
-                return numValue.toLocaleString();
-            }
-            
-            return numValue.toFixed(1);
-        }
-
-        // 📝 ACTUALIZAR ANÁLISIS
-        function updateAnalysis(entityCode) {
-            const entityName = entityCode === "00" ? "México" : 
-                entidades.find(e => e.code === entityCode)?.name || "la entidad seleccionada";
-            
-            document.getElementById('analysisText').textContent = 
-                `Los datos de ${entityName} muestran las características del mercado laboral en esta región. 
-                 La participación femenina y masculina reflejan las dinámicas socioeconómicas específicas de la zona.`;
-        }
-
-        // 📊 ACTUALIZAR STATUS
-        function updateStatus(success) {
-            const status = document.getElementById('dataStatus');
-            const text = document.getElementById('statusText');
-            
-            if (success) {
-                status.style.background = '#e8f5e8';
-                status.style.borderColor = '#4caf50';
-                text.textContent = `✅ Datos cargados: ${empleoData?.data?.length?.toLocaleString() || 0} registros del INEGI`;
-            } else {
-                status.style.background = '#ffebee';
-                status.style.borderColor = '#f44336';
-                text.textContent = '❌ Error cargando datos. Usando datos de ejemplo.';
+                entidadSelect.value = '00';
+                updateDashboard('00');
+            } catch (error) {
+                console.error("Error al inicializar la aplicación:", error);
+                document.querySelector('.main-content').innerHTML = `<h2>Error al cargar los datos</h2><p>${error.message}</p><p>Asegúrate de que la carpeta 'data' está en el lugar correcto.</p>`;
             }
         }
 
-        // 🚀 INICIALIZAR APLICACIÓN
-        async function init() {
-            console.log('🚀 Starting INEGI Dashboard...');
-            
-            const dataLoaded = await loadData();
-            
-            // Mostrar dashboard
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('dashboard').style.display = 'block';
-            
-            // Crear gráficos y tabla iniciales
-            createCharts();
-            updateDataTable("00");
-            updateAnalysis("00");
-            
-            // Event listeners
-            document.getElementById('entitySelect').addEventListener('change', updateCharts);
-            document.getElementById('yearSelect').addEventListener('change', updateCharts);
-            
-            console.log('✅ Dashboard ready!');
-        }
-
-        // 🎬 INICIAR CUANDO LA PÁGINA ESTÉ LISTA
-        document.addEventListener('DOMContentLoaded', init);
+        initializeApp();
     </script>
 </body>
 </html>
